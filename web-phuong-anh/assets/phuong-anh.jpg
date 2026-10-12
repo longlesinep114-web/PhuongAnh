@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff9a9e"/>
+      <stop offset="50%" stop-color="#fecfef"/>
+      <stop offset="100%" stop-color="#fec1df"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#ff477e" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg)"/>
+  <circle cx="150" cy="150" r="130" fill="none" stroke="#ffffff" stroke-width="6" opacity="0.8"/>
+  <circle cx="150" cy="150" r="115" fill="#ffffff" opacity="0.25"/>
+  <text x="150" y="130" font-size="70" text-anchor="middle" dominant-baseline="central">🌸</text>
+  <text x="150" y="200" font-family="'Quicksand', 'Segoe UI', sans-serif" font-weight="700" font-size="24" fill="#692d40" text-anchor="middle">Phương Anh</text>
+  <text x="150" y="230" font-family="'Quicksand', 'Segoe UI', sans-serif" font-weight="500" font-size="14" fill="#a8526d" text-anchor="middle">20/10 Yêu Thương</text>
+</svg>

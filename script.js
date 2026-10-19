@@ -4,61 +4,42 @@
  */
 
 // --- CONFIG & STORY DATA ---
-// --- CONFIG & STORY DATA (8 Ý CẢM XÚC LIÊN TỤC THEO ĐÚNG YÊU CẦU) ---
+// --- CONFIG & STORY DATA (8 CÂU CẢM XÚC 20/10 TỪNG CÂU MỘT) ---
 const STORY_CONFIG = {
   girlName: "Phương Anh",
+  nickname: "Phanh",
   storyFlow: [
     {
-      lines: ["Phương Anh à..."],
-      holdTime: 3800 // Câu mở đầu lắng đọng
+      lines: ["Phanh àa..."],
+      holdTime: 3800 // Câu gọi mở đầu nhẹ nhàng, lắng đọng
     },
     {
-      lines: ["Có một điều anh đã muốn nói với em từ khá lâu rồi."],
-      holdTime: 5000 // Đủ thời gian đọc thong thả
+      lines: ["Hôm nay là ngày 20/10, ngày Phụ nữ Việt Nam."],
+      holdTime: 4800 // Đủ thời gian đọc thong thả
     },
     {
-      lines: [
-        "Ngay từ lần đầu nhìn thấy em, anh đã có một cảm giác rất khác.",
-        "Em là người con gái đầu tiên khiến anh có cảm giác ấy."
-      ],
-      holdTime: 6200 // 2 dòng: giữ 6.2 giây để cảm nhận trọn vẹn
+      lines: ["Anh mong em luôn vui vẻ, bình an và được yêu thương thật nhiều."],
+      holdTime: 5500 // Giữ 5.5 giây để cảm nhận trọn vẹn lời chúc
     },
     {
-      lines: [
-        "Anh thích nụ cười của em.",
-        "Thích cả cách em làm việc...",
-        "và chính những điều đó khiến anh muốn biết về em nhiều hơn."
-      ],
-      holdTime: 6800 // 3 dòng: giữ 6.8 giây đọc chậm rãi
+      lines: ["Mong rằng dù thời gian có trôi qua..."],
+      holdTime: 4200 // Khoảng lắng nhẹ nhàng
     },
     {
-      lines: [
-        "Càng tiếp xúc với em, anh càng nhận ra...",
-        "em là một cô gái rất tinh tế."
-      ],
-      holdTime: 5500 // Giữ 5.5 giây
+      lines: ["Chúng ta vẫn luôn dành cho nhau sự quan tâm..."],
+      holdTime: 4600 // Dịu dàng, chân thành
     },
     {
-      lines: [
-        "Anh thích cách em quan sát mọi thứ,",
-        "cách em thương mọi người và cả tình yêu em dành cho động vật."
-      ],
-      holdTime: 6200 // Giữ 6.2 giây
+      lines: ["Kiên nhẫn và chân thành như những ngày đầu gặp gỡ."],
+      holdTime: 5500 // Giữ 5.5 giây sâu sắc
     },
     {
-      lines: [
-        "Và rồi anh nhận ra...",
-        "anh không chỉ muốn tìm hiểu em thêm nữa."
-      ],
-      holdTime: 5200 // Giữ 5.2 giây
+      lines: ["Lời cuối, anh xin gửi tặng đến mẹ và chị của Phanh."],
+      holdTime: 5000 // Tôn trọng, ấm áp
     },
     {
-      lines: [
-        "Anh muốn được đồng hành cùng em,",
-        "quan tâm đến em,",
-        "và chăm sóc em thật lâu."
-      ],
-      holdTime: 6500 // Câu chốt trước màn tỏ tình: giữ 6.5 giây sâu lắng
+      lines: ["Cháu chúc bác và chị ngày 20/10 ngập tràn tình thương và niềm hạnh phúc."],
+      holdTime: 6200 // Câu chúc gia đình trọn vẹn trước khi chuyển sang trái tim
     }
   ]
 };
@@ -92,26 +73,67 @@ let isAudioMuted = false;
 let webAudioSynthesizer = null;
 
 // --- RESIZE HANDLING ---
+// Dynamic re-centering of climax heart on rotation
+function updateClimaxCoords(w, h) {
+  const centerX = w / 2;
+  const centerY = h * 0.48;
+  const minDim = Math.min(w, h);
+  let heartScale = (w > h) ? (h / 34) : (minDim / 38);
+
+  heartOutlineParticles = [];
+  const outlineSteps = 260;
+  for (let i = 0; i < outlineSteps; i++) {
+    const t = (i / outlineSteps) * Math.PI * 2 - Math.PI / 2;
+    const pt = getHeartCoord(t, heartScale, centerX, centerY);
+    heartOutlineParticles.push(pt);
+  }
+
+  if (flyingHearts && flyingHearts.length > 0) {
+    for (let i = 0; i < flyingHearts.length; i++) {
+      const angle = (i / flyingHearts.length) * Math.PI * 2;
+      const r = Math.sqrt((i % 100) / 100) * 0.92;
+      const newPt = getHeartCoord(angle, heartScale * r, centerX, centerY);
+      flyingHearts[i].targetX = newPt.x;
+      flyingHearts[i].targetY = newPt.y;
+      if (flyingHearts[i].arrived) {
+        flyingHearts[i].x = newPt.x;
+        flyingHearts[i].y = newPt.y;
+      }
+    }
+  }
+}
+
 function resizeCanvases() {
-  const dpr = window.devicePixelRatio || 1;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
   const w = window.innerWidth;
   const h = window.innerHeight;
 
   bgCanvas.width = w * dpr;
   bgCanvas.height = h * dpr;
+  bgCtx.setTransform(1, 0, 0, 1, 0, 0);
   bgCtx.scale(dpr, dpr);
 
   heartCanvas.width = w * dpr;
   heartCanvas.height = h * dpr;
+  heartCtx.setTransform(1, 0, 0, 1, 0, 0);
   heartCtx.scale(dpr, dpr);
+
+  if (climaxStarted) {
+    updateClimaxCoords(w, h);
+  }
 
   checkOrientation();
 }
 
 window.addEventListener('resize', resizeCanvases);
 window.addEventListener('orientationchange', () => {
+  setTimeout(resizeCanvases, 60);
   setTimeout(resizeCanvases, 250);
+  setTimeout(resizeCanvases, 500);
 });
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', resizeCanvases);
+}
 
 // Orientation Hint Logic
 function checkOrientation() {
@@ -219,8 +241,9 @@ function startAudioExperience() {
   musicToggle.classList.remove('hide');
   orientationHint.classList.remove('show');
 
-  // Try playing user's mp3 audio file
-  bgMusic.volume = 0.5;
+  // Play user's mp3 audio file
+  bgMusic.volume = 0.65;
+  bgMusic.loop = true;
   const playPromise = bgMusic.play();
 
   if (playPromise !== undefined) {
@@ -463,48 +486,94 @@ function displayNextSentence() {
 }
 
 // ===================================================
-// FINAL SCENE: EXACT 4-STEP SPECIFICATION
+// FINAL SCENE: VORTEX SUCTION & HEART FORMATION
 // ===================================================
 let climaxStarted = false;
-let outlineProgress = 0; // Bước 1: 0 -> 1 vẽ từ từ outline trong 1.5s
-let outlineDuration = 1500;
+let outlineProgress = 0; // Bước 1: 0 -> 1 vẽ outline trong 1.2s
+let outlineDuration = 1200;
 let outlineStartTime = 0;
 let heartOutlineParticles = [];
 let flyingHearts = [];
 let fillProgress = 0;
 let heartBeatPhase = 0;
-const TOTAL_FILL_HEARTS = 320;
+const TOTAL_FILL_HEARTS = 360;
+let proposalTriggered = false;
 
-class FlyingMiniHeart {
-  constructor(startX, startY, targetX, targetY) {
+class SuctionMiniHeart {
+  constructor(startX, startY, targetX, targetY, delay = 0) {
     this.startX = startX;
     this.startY = startY;
     this.targetX = targetX;
     this.targetY = targetY;
     this.x = startX;
     this.y = startY;
-    this.size = Math.random() * 6 + 6;
-    this.color = Math.random() > 0.4 ? '#ff2a5f' : '#ff477e';
-    this.alpha = 0.9;
+    this.delay = delay;
+    
+    // Kích thước lấp lánh đa dạng (4px - 9px)
+    this.size = Math.random() * 5.5 + 4;
+    
+    // Bảng màu tình yêu rực rỡ từ hồng phấn đến đỏ ngọc ruby
+    const colors = ['#ff1744', '#ff2a5f', '#ff477e', '#f50057', '#ff5252', '#ff7597', '#ff8da1'];
+    this.color = colors[Math.floor(Math.random() * colors.length)];
+    
+    // Độ xoáy uốn lượn khi bị lực hút kéo vào trung tâm
+    this.swirlFactor = (Math.random() - 0.5) * 140;
+    
     this.progress = 0;
-    this.speed = 0.045;
+    // Tốc độ hút gia tốc
+    this.speed = Math.random() * 0.014 + 0.018;
+    this.arrived = false;
+    this.pulsePhase = Math.random() * Math.PI * 2;
   }
 
   update() {
-    if (this.progress < 1) {
+    if (this.delay > 0) {
+      this.delay--;
+      return;
+    }
+
+    if (!this.arrived) {
       this.progress += this.speed;
-      if (this.progress > 1) this.progress = 1;
-      this.x = this.startX + (this.targetX - this.startX) * this.progress;
-      this.y = this.startY + (this.targetY - this.startY) * this.progress;
+      if (this.progress >= 1) {
+        this.progress = 1;
+        this.arrived = true;
+      }
+
+      // Gia tốc hút mạnh dần vào tâm (vortex acceleration)
+      const p = this.progress;
+      const easeP = p * p * (3 - 2 * p); // smooth step
+      
+      // Độ cong uốn lượn xoắn ốc khi bị lực hấp dẫn kéo vào
+      const swirl = Math.sin(p * Math.PI) * this.swirlFactor * (1 - p);
+      const dx = this.targetX - this.startX;
+      const dy = this.targetY - this.startY;
+      const dist = Math.hypot(dx, dy) || 1;
+      const perpX = -dy / dist;
+      const perpY = dx / dist;
+
+      this.x = this.startX + dx * easeP + perpX * swirl;
+      this.y = this.startY + dy * easeP + perpY * swirl;
+    } else {
+      // Khi đã hội tụ vào lòng trái tim lớn, rung rinh nhịp đập dịu dàng
+      this.pulsePhase += 0.04;
+      this.x = this.targetX + Math.sin(this.pulsePhase) * 1.2;
+      this.y = this.targetY + Math.cos(this.pulsePhase) * 1.2;
     }
   }
 
   draw(ctx) {
+    if (this.delay > 0) return;
+
     ctx.save();
     ctx.translate(this.x, this.y);
     ctx.fillStyle = this.color;
-    ctx.globalAlpha = 0.9;
-    const s = this.size / 10;
+    ctx.shadowColor = this.color;
+    ctx.shadowBlur = this.arrived ? 8 : 16;
+    ctx.globalAlpha = this.arrived ? 0.78 : 0.95;
+
+    const scaleMult = this.arrived ? (0.85 + Math.sin(this.pulsePhase) * 0.12) : 1;
+    const s = (this.size / 10) * scaleMult;
+
     ctx.beginPath();
     ctx.moveTo(0, 0);
     ctx.bezierCurveTo(-5 * s, -5 * s, -10 * s, 2 * s, 0, 10 * s);
@@ -532,12 +601,12 @@ function transitionToClimax() {
   }, 800);
 }
 
-// Quản lý trạng thái cánh tay và dòng chảy tình yêu
-let handPourProgress = 0; // 0 -> 1 tiến trình cánh tay tiến vào rót tình yêu
-let handPourPhase = 0;    // 0: chưa vào, 1: đang rót, 2: đã rút lui
-
 function initClimaxFinalScene() {
   climaxStarted = true;
+  proposalTriggered = false;
+  fillProgress = 0;
+  flyingHearts = [];
+
   const w = window.innerWidth;
   const h = window.innerHeight;
   const centerX = w / 2;
@@ -558,57 +627,37 @@ function initClimaxFinalScene() {
     heartOutlineParticles.push(pt);
   }
 
-  // 2. Tạo tọa độ đích lấp đầy bên trong
+  // 2. Tạo tọa độ đích lấp đầy bên trong trái tim lớn
   const innerTargets = [];
   while (innerTargets.length < TOTAL_FILL_HEARTS) {
     const angle = Math.random() * Math.PI * 2;
-    const r = Math.sqrt(Math.random()) * 0.90;
+    const r = Math.sqrt(Math.random()) * 0.92;
     const basePt = getHeartCoord(angle, heartScale * r, centerX, centerY);
     innerTargets.push({
-      x: basePt.x + (Math.random() - 0.5) * 10,
-      y: basePt.y + (Math.random() - 0.5) * 10
+      x: basePt.x + (Math.random() - 0.5) * 8,
+      y: basePt.y + (Math.random() - 0.5) * 8
     });
   }
 
-  // BƯỚC 1: Vẽ outline trái tim trắng phát sáng (1.5 giây)
+  // BƯỚC 1: Vẽ đường viền outline phát sáng
   outlineStartTime = performance.now();
   requestAnimationFrame(animateClimax);
 
-  // BƯỚC 2: Cánh tay yêu thương xuất hiện từ trên rót dòng chảy trái tim đỏ đổ đầy trái tim lớn
-  setTimeout(() => {
-    handPourPhase = 1; // Bắt đầu đưa cánh tay vào rót tình yêu
-    let spawned = 0;
+  // BƯỚC 2: HÚT HÀNG TRĂM TRÁI TIM NHỎ TỪ BỐN PHƯƠNG TÁM HƯỚNG MÀN HÌNH VÀO TÂM ĐỂ HÌNH THÀNH TRÁI TIM TO
+  const maxDim = Math.max(w, h);
+  for (let i = 0; i < TOTAL_FILL_HEARTS; i++) {
+    // Vị trí xuất phát: Xung quanh toàn bộ viền và các góc màn hình
+    const spawnAngle = Math.random() * Math.PI * 2;
+    const spawnDist = maxDim * (0.55 + Math.random() * 0.55);
+    const startX = centerX + Math.cos(spawnAngle) * spawnDist;
+    const startY = centerY + Math.sin(spawnAngle) * spawnDist;
 
-    const spawnInterval = setInterval(() => {
-      if (spawned >= TOTAL_FILL_HEARTS) {
-        clearInterval(spawnInterval);
-        // Khi rót đầy xong: Cánh tay nhẹ nhàng thu về
-        setTimeout(() => { handPourPhase = 2; }, 600);
-        return;
-      }
+    // Các đợt sóng hút nối tiếp nhau trong ~2.5 giây tạo cảm giác bão tình yêu hội tụ
+    const delay = Math.floor(Math.random() * 110);
 
-      // Mỗi đợt rót 4-5 hạt tim đỏ từ bàn tay đang rót phía trên đỉnh trái tim
-      const handPourOriginX = centerX + (Math.random() - 0.5) * 20;
-      const handPourOriginY = centerY - heartScale * 14 - 15;
-
-      for (let k = 0; k < 5 && spawned < TOTAL_FILL_HEARTS; k++) {
-        const startX = handPourOriginX + (Math.random() - 0.5) * 16;
-        const startY = handPourOriginY + (Math.random() - 0.5) * 10;
-        const mini = new FlyingMiniHeart(startX, startY, innerTargets[spawned].x, innerTargets[spawned].y);
-        mini.speed = 0.055;
-        flyingHearts.push(mini);
-        spawned++;
-      }
-      fillProgress = spawned / TOTAL_FILL_HEARTS;
-
-      // BƯỚC 3: Khi trái tim đỏ đã được đong đầy (85%), hiện nhẹ "Phương Anh..."
-      if (fillProgress >= 0.85 && !finalLeadNameEl.classList.contains('show')) {
-        finalLeadNameEl.classList.add('show');
-        // Sau 1 giây hiện câu tỏ tình bừng sáng ở trung tâm
-        setTimeout(revealStep4Proposal, 1000);
-      }
-    }, 45); // ~3.5 giây đổ đầy rực rỡ
-  }, 1500);
+    const mini = new SuctionMiniHeart(startX, startY, innerTargets[i].x, innerTargets[i].y, delay);
+    flyingHearts.push(mini);
+  }
 }
 
 /**
@@ -638,19 +687,21 @@ function celebrateLove() {
   if (actionsEl) actionsEl.classList.add('hide');
   if (acceptedMessage) acceptedMessage.classList.remove('hide');
 
-  // Bùng nổ thêm hàng loạt trái tim lấp lánh hạnh phúc
+  // Bùng nổ thêm hàng loạt trái tim lấp lánh hạnh phúc từ tâm tỏa ra
   const w = window.innerWidth;
   const h = window.innerHeight;
-  for (let i = 0; i < 80; i++) {
+  for (let i = 0; i < 90; i++) {
     const angle = Math.random() * Math.PI * 2;
-    const mini = new FlyingMiniHeart(
+    const dist = Math.random() * 300 + 50;
+    const burstHeart = new SuctionMiniHeart(
       w / 2, 
       h * 0.48, 
-      w / 2 + Math.cos(angle) * (Math.random() * 260 + 40),
-      h * 0.48 + Math.sin(angle) * (Math.random() * 260 + 40)
+      w / 2 + Math.cos(angle) * dist,
+      h * 0.48 + Math.sin(angle) * dist,
+      0
     );
-    mini.speed = 0.04;
-    flyingHearts.push(mini);
+    burstHeart.speed = 0.035;
+    flyingHearts.push(burstHeart);
   }
 }
 
@@ -662,110 +713,36 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnShy) btnShy.addEventListener('click', celebrateLove);
 });
 
-// Hàm vẽ cánh tay nghệ thuật rõ nét, nổi bật, vươn xuống rót đầy dòng tình yêu đỏ
-function drawPouringHand(ctx, centerX, centerY, heartScale) {
-  if (handPourPhase === 0) return;
-
-  if (handPourPhase === 1 && handPourProgress < 1) {
-    handPourProgress += 0.035;
-    if (handPourProgress > 1) handPourProgress = 1;
-  } else if (handPourPhase === 2 && handPourProgress > 0) {
-    handPourProgress -= 0.025;
-    if (handPourProgress < 0) handPourProgress = 0;
-  }
-
-  if (handPourProgress <= 0) return;
-
-  ctx.save();
-  ctx.globalAlpha = Math.min(1, handPourProgress * 1.1);
-
-  // Vị trí cánh tay: Vươn từ mép trên màn hình xuống sát đỉnh lõm của trái tim
-  const handX = centerX;
-  const targetHandY = centerY - heartScale * 14 + 10;
-  const startHandY = -40;
-  const currentHandY = startHandY + (targetHandY - startHandY) * handPourProgress;
-
-  ctx.translate(handX, currentHandY);
-
-  // 1. Quầng sáng lãng mạn bao quanh bàn tay
-  const handGlow = ctx.createRadialGradient(0, -10, 10, 0, 0, 70);
-  handGlow.addColorStop(0, 'rgba(255, 180, 205, 0.45)');
-  handGlow.addColorStop(0.7, 'rgba(255, 107, 139, 0.2)');
-  handGlow.addColorStop(1, 'rgba(255, 107, 139, 0)');
-  ctx.fillStyle = handGlow;
-  ctx.beginPath();
-  ctx.arc(0, 0, 70, 0, Math.PI * 2);
-  ctx.fill();
-
-  // 2. Nét vẽ cánh tay và bàn tay trắng phát sáng (Elegantly Styled Hand)
-  ctx.strokeStyle = '#ffffff';
-  ctx.lineWidth = 3.5;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  ctx.shadowColor = 'rgba(255, 255, 255, 0.95)';
-  ctx.shadowBlur = 16;
-
-  // Cánh tay từ trên vươn xuống
-  ctx.beginPath();
-  ctx.moveTo(-28, -85);
-  ctx.bezierCurveTo(-22, -45, -20, -20, -16, -5); // Cổ tay trái
-  ctx.bezierCurveTo(-20, 12, -12, 26, 0, 30);    // Lòng bàn tay nghiêng rót
-  ctx.bezierCurveTo(12, 26, 20, 12, 16, -5);     // Bàn tay phải
-  ctx.bezierCurveTo(20, -20, 22, -45, 28, -85);  // Cổ tay phải
-  ctx.stroke();
-
-  // Ngón tay thon dài nâng niu
-  ctx.beginPath();
-  ctx.moveTo(-10, 16);
-  ctx.quadraticCurveTo(-4, 35, 0, 38); // Ngón trỏ/giữa
-  ctx.moveTo(-4, 20);
-  ctx.quadraticCurveTo(4, 34, 7, 36);  // Ngón áp út
-  ctx.stroke();
-
-  // 3. Trái tim hồng ngọc rực rỡ trong lòng bàn tay đang rót
-  ctx.fillStyle = '#ff1a53';
-  ctx.shadowColor = '#ff1a53';
-  ctx.shadowBlur = 22;
-  ctx.beginPath();
-  const s = 1.6;
-  ctx.moveTo(0, 12);
-  ctx.bezierCurveTo(-6 * s, 6 * s, -11 * s, 14 * s, 0, 24 * s);
-  ctx.bezierCurveTo(11 * s, 14 * s, 6 * s, 6 * s, 0, 12);
-  ctx.fill();
-
-  // 4. Dòng chảy tia sáng & trái tim nhỏ đỏ tuôn trào xuống tim lớn
-  ctx.fillStyle = '#ffffff';
-  ctx.shadowColor = '#ffeef2';
-  ctx.shadowBlur = 10;
-  for (let d = 0; d < 4; d++) {
-    const sparkY = 38 + d * 14 + (performance.now() * 0.08 + d * 10) % 25;
-    const sparkX = Math.sin(performance.now() * 0.01 + d) * 6;
-    ctx.beginPath();
-    ctx.arc(sparkX, sparkY, 2.5, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  ctx.restore();
-}
-
 function animateClimax(now) {
   if (!climaxStarted) return;
   const w = window.innerWidth;
   const h = window.innerHeight;
   heartCtx.clearRect(0, 0, w, h);
 
-  // Bước 1: Tính tiến trình vẽ outline (1.5s)
+  // Tính tiến trình vẽ outline (1.2s)
   if (outlineProgress < 1) {
     const elapsed = now - outlineStartTime;
     outlineProgress = Math.min(1, elapsed / outlineDuration);
   }
 
-  // Heartbeat cực nhẹ nhàng cho trái tim lớn
+  // Cập nhật và vẽ các trái tim nhỏ bị hút vào trung tâm
+  let arrivedCount = 0;
+  for (let i = 0; i < flyingHearts.length; i++) {
+    flyingHearts[i].update();
+    flyingHearts[i].draw(heartCtx);
+    if (flyingHearts[i].arrived) arrivedCount++;
+  }
+
+  // Tỷ lệ lấp đầy của trái tim lớn hình thành theo số lượng hạt đã tụ về
+  const targetFill = flyingHearts.length > 0 ? (arrivedCount / flyingHearts.length) : 0;
+  fillProgress += (targetFill - fillProgress) * 0.08;
+
+  // Heartbeat nhẹ nhàng cho trái tim to
   heartBeatPhase += 0.025;
   const beatScale = 1 + Math.sin(heartBeatPhase) * 0.015;
 
-  // Lớp nền đỏ nhung lấp đầy dần bên trong
-  if (heartOutlineParticles.length > 0 && fillProgress > 0) {
+  // Lớp nền đỏ nhung của trái tim lớn hình thành dần và bừng sáng
+  if (heartOutlineParticles.length > 0 && fillProgress > 0.04) {
     heartCtx.save();
     heartCtx.beginPath();
     heartCtx.moveTo(heartOutlineParticles[0].x, heartOutlineParticles[0].y);
@@ -780,15 +757,15 @@ function animateClimax(now) {
     heartGrad.addColorStop(0.65, '#e60039');
     heartGrad.addColorStop(1, '#a60026');
 
-    heartCtx.globalAlpha = Math.min(0.96, fillProgress * 1.05);
+    heartCtx.globalAlpha = Math.min(0.96, fillProgress * 1.15);
     heartCtx.fillStyle = heartGrad;
-    heartCtx.shadowColor = 'rgba(230, 0, 57, 0.7)';
+    heartCtx.shadowColor = 'rgba(230, 0, 57, 0.75)';
     heartCtx.shadowBlur = 35;
     heartCtx.fill();
     heartCtx.restore();
   }
 
-  // Vẽ outline trái tim màu trắng phát sáng (theo tiến trình Bước 1)
+  // Vẽ outline trái tim màu trắng phát sáng
   heartCtx.save();
   heartCtx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
   heartCtx.lineWidth = 4;
@@ -807,16 +784,12 @@ function animateClimax(now) {
   }
   heartCtx.restore();
 
-  // Vẽ các trái tim nhỏ đỏ bay vào & rung rinh nhẹ
-  for (let i = 0; i < flyingHearts.length; i++) {
-    flyingHearts[i].update();
-    flyingHearts[i].draw(heartCtx);
+  // BƯỚC 3 & 4: Khi trái tim to đã hút đủ và thành hình trọn vẹn (>= 75%), hiện chữ tỏ tình
+  if (fillProgress >= 0.75 && !proposalTriggered) {
+    proposalTriggered = true;
+    if (finalLeadNameEl) finalLeadNameEl.classList.add('show');
+    setTimeout(revealStep4Proposal, 1000);
   }
-
-  // Vẽ cánh tay yêu thương xuất hiện rót đầy trái tim đỏ
-  const minDim = Math.min(w, h);
-  let heartScale = (w > h) ? (h / 34) : (minDim / 38);
-  drawPouringHand(heartCtx, w / 2, h * 0.48, heartScale);
 
   requestAnimationFrame(animateClimax);
 }

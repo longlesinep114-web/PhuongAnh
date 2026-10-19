@@ -28,6 +28,7 @@
 html, body {
   width: 100%;
   height: 100%;
+  height: 100dvh;
   overflow: hidden;
   background: radial-gradient(circle at 50% 35%, #180b14 0%, #0d070c 50%, #050205 100%);
   font-family: var(--font-body);
@@ -35,6 +36,10 @@ html, body {
   position: fixed;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
 }
 
 /* Safe area insets for notches & home bars */
@@ -172,15 +177,17 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
+  height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
   opacity: 0;
   pointer-events: none;
   visibility: hidden;
   transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1);
   transform: scale(0.96);
+  overflow: hidden;
 }
 
 .screen-view.active {
@@ -206,14 +213,15 @@ body {
    STAGE 1: INTRO SCREEN
    =================================================== */
 .intro-card {
-  width: 100%;
+  width: 92%;
   max-width: 420px;
-  padding: 38px 28px;
+  max-height: 90dvh;
+  padding: clamp(24px, 4.5vh, 38px) clamp(16px, 4vw, 28px);
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: clamp(10px, 2vh, 16px);
   animation: floatCard 6s ease-in-out infinite;
 }
 
@@ -224,9 +232,9 @@ body {
 
 .intro-avatar-wrapper {
   position: relative;
-  width: 130px;
-  height: 130px;
-  margin-bottom: 6px;
+  width: clamp(105px, 26vw, 130px);
+  height: clamp(105px, 26vw, 130px);
+  margin-bottom: 4px;
 }
 
 .avatar-glow-ring {
@@ -272,7 +280,7 @@ body {
 
 .intro-title {
   font-family: var(--font-serif);
-  font-size: 2.1rem;
+  font-size: clamp(1.75rem, 5.5vw, 2.15rem);
   font-weight: 700;
   background: linear-gradient(135deg, #ffffff, #ffd0dc, #ff8da1);
   -webkit-background-clip: text;
@@ -281,7 +289,7 @@ body {
 }
 
 .intro-subtitle {
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 3.2vw, 0.95rem);
   color: var(--text-soft);
   line-height: 1.5;
   max-width: 320px;
@@ -350,12 +358,13 @@ body {
    =================================================== */
 .story-layout {
   width: 100%;
-  max-width: 900px;
+  max-width: 860px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  margin: 0 auto;
+  padding: 0 16px;
 }
 
 .story-photo-wrapper {
@@ -428,7 +437,16 @@ body {
 
 .story-message-container {
   width: 100%;
-  max-width: 520px;
+  max-width: 900px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 .letter-card {
@@ -499,18 +517,17 @@ body {
 }
 
 .narration-card {
-  padding: 24px 28px;
-  min-height: 160px;
+  padding: 16px 20px;
+  min-height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  border-radius: 24px;
-  background: rgba(18, 12, 22, 0.65);
-  border: 1px solid rgba(255, 180, 205, 0.2);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 77, 121, 0.15);
+  background: transparent;
+  border: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
 }
 
 .narration-display-area {
@@ -523,12 +540,15 @@ body {
 
 .narrative-text {
   font-family: var(--font-serif);
-  font-size: 1.34rem;
+  font-size: 2.35rem;
   line-height: 1.85;
   color: #ffffff;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95), 0 0 22px rgba(255, 180, 205, 0.4);
-  letter-spacing: 0.35px;
-  font-weight: 500;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.98),
+               0 2px 10px rgba(0, 0, 0, 0.9),
+               0 0 35px rgba(255, 180, 205, 0.6),
+               0 0 12px rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.6px;
+  font-weight: 600;
   text-align: center;
   min-height: 2.2em;
 }
@@ -606,10 +626,9 @@ body {
   transform: translateY(0);
 }
 
-/* Bước 4: "Làm người yêu anh nhé ❤️" nổi bật trên nền trái tim đỏ */
 .final-proposal-text {
   font-family: 'Dancing Script', 'Alex Brush', cursive;
-  font-size: 3.2rem;
+  font-size: 2.75rem;
   font-weight: 700;
   color: #ffffff;
   line-height: 1.35;
@@ -620,7 +639,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
+  flex-wrap: wrap;
+  text-align: center;
+  max-width: 92vw;
+  margin: 0 auto;
 }
 
 .prop-main-line {
@@ -757,159 +780,223 @@ body {
 }
 
 /* ===================================================
-   RESPONSIVE DESIGN & LANDSCAPE MODE (CINEMATIC)
+   RESPONSIVE DESIGN & LANDSCAPE CINEMA MODE
+   Adapts flawlessly to ALL phones (iPhone SE, 11-16 Pro/Max,
+   Samsung, Xiaomi, etc.) in both Portrait & Landscape
    =================================================== */
 
-/* Landscape Mode for all devices (especially Mobile Landscape) */
+/* --- 1. LANDSCAPE MODE (Xoay ngang màn hình - Cinema Mode) --- */
 @media (orientation: landscape) {
   .orientation-hint {
     display: none !important;
   }
 
-  /* STAGE 1: INTRO in Landscape */
+  /* Stage 1: Intro Card in Landscape - 2 Cột gọn gàng, không tràn màn hình */
   .intro-card {
-    max-width: 680px;
-    padding: 24px 36px;
-    flex-direction: row;
+    max-width: 660px;
+    width: 90%;
+    max-height: 88dvh;
+    padding: clamp(14px, 3.5vh, 24px) clamp(20px, 4vw, 36px);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto auto;
     align-items: center;
-    gap: 32px;
+    column-gap: clamp(18px, 3.5vw, 28px);
+    row-gap: clamp(6px, 1.5vh, 10px);
     text-align: left;
+    animation: none;
   }
 
   .intro-avatar-wrapper {
-    width: 140px;
-    height: 140px;
+    grid-row: 1 / span 3;
+    grid-column: 1;
+    width: clamp(85px, 22vh, 120px);
+    height: clamp(85px, 22vh, 120px);
     margin-bottom: 0;
-    flex-shrink: 0;
   }
 
   .intro-title {
-    font-size: 2.2rem;
+    grid-column: 2;
+    font-size: clamp(1.6rem, 5vh, 2.15rem);
+    line-height: 1.15;
   }
 
   .intro-subtitle {
-    max-width: 420px;
+    grid-column: 2;
+    font-size: clamp(0.82rem, 2.8vh, 0.95rem);
+    max-width: 440px;
+    line-height: 1.45;
   }
 
   .start-btn {
-    margin-top: 4px;
-    align-self: flex-start;
+    grid-column: 2;
+    justify-self: start;
+    padding: clamp(8px, 2vh, 12px) clamp(18px, 4vw, 28px);
+    font-size: clamp(0.85rem, 2.8vh, 1rem);
+    margin-top: 2px;
   }
 
-  /* STAGE 2: STORY in Landscape (Cinematic split screen) */
+  .intro-landscape-tip {
+    display: none !important;
+  }
+
+  /* Stage 2: Story Narrative Text in Landscape (Thước phim điện ảnh) */
   .story-layout {
-    flex-direction: row;
+    width: 100%;
+    max-width: 900px;
+    padding: 0 clamp(16px, 4vw, 32px);
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 40px;
-    max-width: 960px;
-    padding: 0 20px;
-  }
-
-  .story-photo-wrapper {
-    flex-shrink: 0;
-  }
-
-  .photo-card-frame {
-    width: 200px;
-    height: 200px;
   }
 
   .story-message-container {
-    max-width: 540px;
-    flex: 1;
+    width: 100%;
+    max-width: 860px;
   }
 
-  .chat-bubble {
-    min-height: 190px;
-    padding: 26px 32px;
+  .narrative-text {
+    font-size: clamp(1.65rem, 5.8vh, 2.45rem);
+    line-height: 1.75;
+    letter-spacing: 0.6px;
   }
 
-  .typed-text {
-    font-size: 1.35rem;
-  }
-
-  /* STAGE 3: CLIMAX in Landscape */
+  /* Stage 3: Climax Heart & Proposal in Landscape */
   .proposal-wrapper {
-    max-width: 600px;
+    width: 90%;
+    max-width: 580px;
   }
 
-  .proposal-text {
-    font-size: 2.6rem;
+  .proposal-box {
+    padding: 6px 12px;
   }
 
-  .proposal-sub {
-    font-size: 1.05rem;
+  .final-lead-name {
+    font-size: clamp(1.1rem, 3.5vh, 1.35rem);
+    margin-bottom: 2px;
+  }
+
+  .final-proposal-text {
+    font-size: clamp(1.5rem, 5.5vh, 2.2rem);
+    gap: 8px;
+    line-height: 1.25;
+  }
+
+  .proposal-actions {
+    margin-top: clamp(8px, 2vh, 14px);
+    gap: clamp(8px, 2vw, 14px);
+  }
+
+  .choice-btn {
+    padding: clamp(7px, 2vh, 11px) clamp(16px, 3vw, 24px);
+    font-size: clamp(0.82rem, 2.8vh, 0.95rem);
+    min-height: 38px;
+  }
+
+  .accepted-message {
+    margin-top: 8px;
+    padding: 10px 16px;
+  }
+
+  .sweet-quote {
+    font-size: 0.88rem;
+    line-height: 1.4;
   }
 }
 
-/* Small mobile portrait screens (iPhone SE, smaller Androids) */
-@media (max-width: 380px) and (orientation: portrait) {
+/* --- 2. MOBILE PORTRAIT (Điện thoại màn hình dọc: iPhone 11-16, Samsung Galaxy, Xiaomi...) --- */
+@media (max-width: 768px) and (orientation: portrait) {
+  .screen-view {
+    padding: max(16px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  }
+
   .intro-card {
-    padding: 26px 18px;
-    gap: 12px;
+    width: 92%;
+    max-width: 390px;
+    padding: clamp(26px, 5vh, 36px) clamp(16px, 4vw, 24px);
+    gap: clamp(12px, 2.2vh, 16px);
   }
 
   .intro-avatar-wrapper {
-    width: 105px;
-    height: 105px;
+    width: clamp(105px, 28vw, 125px);
+    height: clamp(105px, 28vw, 125px);
   }
 
   .intro-title {
-    font-size: 1.75rem;
+    font-size: clamp(1.75rem, 6vw, 2.1rem);
   }
 
   .intro-subtitle {
-    font-size: 0.85rem;
+    font-size: clamp(0.85rem, 3.2vw, 0.95rem);
+    line-height: 1.5;
   }
 
   .start-btn {
     padding: 12px 24px;
-    font-size: 0.92rem;
+    font-size: clamp(0.92rem, 3.5vw, 1.02rem);
+    min-height: 48px;
   }
 
-  .photo-card-frame {
-    width: 135px;
-    height: 135px;
+  .story-layout {
+    width: 100%;
+    padding: 0 12px;
   }
 
-  .chat-bubble {
-    padding: 18px 20px;
-    min-height: 150px;
+  .story-message-container {
+    width: 100%;
+    max-width: 95vw;
   }
 
-  .typed-text {
-    font-size: 1.08rem;
+  .narrative-text {
+    font-size: clamp(1.45rem, 5vw, 1.85rem);
+    line-height: 1.7;
+    letter-spacing: 0.4px;
   }
 
-  .proposal-text {
-    font-size: 1.85rem;
+  .proposal-wrapper {
+    width: 94%;
+    max-width: 440px;
+  }
+
+  .final-lead-name {
+    font-size: 1.25rem;
+  }
+
+  .final-proposal-text {
+    font-size: clamp(1.65rem, 6.2vw, 2.15rem);
+    gap: 6px;
+    line-height: 1.3;
+  }
+
+  .proposal-actions {
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .choice-btn {
-    padding: 10px 20px;
-    font-size: 0.9rem;
+    padding: 11px 22px;
+    font-size: 0.95rem;
+    min-width: 135px;
+    min-height: 44px;
   }
 }
 
-/* Extremely short height devices in landscape */
-@media (max-height: 480px) and (orientation: landscape) {
-  .screen-view {
-    padding: 12px 20px;
-  }
-
+/* --- 3. SMALL PHONES (iPhone SE, iPhone mini, máy nhỏ <= 380px) --- */
+@media (max-width: 380px) and (orientation: portrait) {
   .intro-card {
-    padding: 16px 24px;
-    gap: 20px;
+    padding: 22px 14px;
+    gap: 10px;
   }
 
   .intro-avatar-wrapper {
-    width: 100px;
-    height: 100px;
+    width: 95px;
+    height: 95px;
   }
 
   .intro-title {
-    font-size: 1.6rem;
+    font-size: 1.65rem;
   }
 
   .intro-subtitle {
@@ -919,32 +1006,22 @@ body {
   .start-btn {
     padding: 10px 20px;
     font-size: 0.88rem;
+    min-height: 42px;
   }
 
-  .photo-card-frame {
-    width: 120px;
-    height: 120px;
+  .narrative-text {
+    font-size: 1.35rem;
+    line-height: 1.6;
   }
 
-  .chat-bubble {
-    min-height: 120px;
-    padding: 14px 20px;
+  .final-proposal-text {
+    font-size: 1.55rem;
   }
 
-  .typed-text {
-    font-size: 1.1rem;
-    line-height: 1.45;
-  }
-
-  .proposal-text {
-    font-size: 2rem;
-  }
-
-  .proposal-box {
-    gap: 8px;
-  }
-
-  .proposal-actions {
-    margin-top: 8px;
+  .choice-btn {
+    padding: 9px 16px;
+    font-size: 0.86rem;
+    min-width: 120px;
+    min-height: 40px;
   }
 }

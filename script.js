@@ -50,12 +50,6 @@ const bgCtx = bgCanvas.getContext('2d');
 const heartCanvas = document.getElementById('heart-canvas');
 const heartCtx = heartCanvas.getContext('2d');
 
-const experienceWrapper = document.getElementById('experience-wrapper');
-const rotateToggle = document.getElementById('rotate-toggle');
-const rotateLabel = rotateToggle ? rotateToggle.querySelector('.rotate-label') : null;
-const rotateIcon = rotateToggle ? rotateToggle.querySelector('.rotate-icon') : null;
-const hintRotateBtn = document.getElementById('hint-rotate-btn');
-
 const introScreen = document.getElementById('intro-screen');
 const storyScreen = document.getElementById('story-screen');
 const climaxScreen = document.getElementById('climax-screen');
@@ -63,7 +57,6 @@ const climaxScreen = document.getElementById('climax-screen');
 const startBtn = document.getElementById('start-btn');
 const musicToggle = document.getElementById('music-toggle');
 const bgMusic = document.getElementById('bg-music');
-const orientationHint = document.getElementById('orientation-hint');
 
 const narrativeTextEl = document.getElementById('narrative-text');
 
@@ -79,134 +72,18 @@ let isAudioMuted = false;
 let webAudioSynthesizer = null;
 
 // ===================================================
-// VIEWPORT & ORIENTATION HANDLING (HỖ TRỢ IPHONE & WEBVIEW ZALO)
+// CANVAS & RESIZE HANDLING (TỐI ƯU MƯỢT MÀ CHUẨN MÀN HÌNH DỌC)
 // ===================================================
 function getActiveDimensions() {
-  const isForced = document.body.classList.contains('force-landscape');
-  let w = window.innerWidth;
-  let h = window.innerHeight;
-  if (isForced && w < h) {
-    return { w: h, h: w };
-  }
-  return { w, h };
+  return { w: window.innerWidth, h: window.innerHeight };
 }
 
-function isPhysicalLandscape() {
-  const w = window.innerWidth;
-  const h = window.innerHeight;
-  let angle = 0;
-  if (screen.orientation && typeof screen.orientation.angle === 'number') {
-    angle = screen.orientation.angle;
-  } else if (typeof window.orientation === 'number') {
-    angle = window.orientation;
-  }
-  const isAngleLandscape = Math.abs(angle) === 90 || Math.abs(angle) === 270;
-  const isAspectLandscape = w > h;
-
-  return isAspectLandscape || isAngleLandscape;
-}
-
-function updateOrientation() {
-  const physicalLandscape = isPhysicalLandscape();
-  const isForced = document.body.classList.contains('force-landscape');
-
-  if (physicalLandscape) {
-    // Trình duyệt hoặc hệ điều hành đã tự xoay sang ngang
-    document.body.classList.remove('force-landscape');
-    if (experienceWrapper) {
-      experienceWrapper.style.width = '';
-      experienceWrapper.style.height = '';
-    }
-    document.body.classList.add('is-landscape');
-    if (rotateLabel) rotateLabel.textContent = "Toàn cảnh ✨";
-    if (rotateIcon) rotateIcon.textContent = "📱";
-    if (orientationHint) orientationHint.classList.remove('show');
-  } else {
-    if (isForced) {
-      document.body.classList.add('is-landscape');
-      if (rotateLabel) rotateLabel.textContent = "Xem dọc";
-      if (rotateIcon) rotateIcon.textContent = "📱";
-      if (orientationHint) orientationHint.classList.remove('show');
-    } else {
-      document.body.classList.remove('is-landscape');
-      if (experienceWrapper) {
-        experienceWrapper.style.width = '';
-        experienceWrapper.style.height = '';
-      }
-      if (rotateLabel) rotateLabel.textContent = "Xoay ngang";
-      if (rotateIcon) rotateIcon.textContent = "🔄";
-      checkOrientationHint();
-    }
-  }
-
-  resizeCanvases();
-}
-
-function toggleForceLandscape() {
-  if (isPhysicalLandscape()) {
-    return;
-  }
-  const isForced = document.body.classList.toggle('force-landscape');
-
-  if (isForced) {
-    const screenH = Math.max(window.innerHeight, window.innerWidth);
-    const screenW = Math.min(window.innerHeight, window.innerWidth);
-    if (experienceWrapper) {
-      experienceWrapper.style.width = screenH + 'px';
-      experienceWrapper.style.height = screenW + 'px';
-    }
-  } else {
-    if (experienceWrapper) {
-      experienceWrapper.style.width = '';
-      experienceWrapper.style.height = '';
-    }
-  }
-
-  // Cố gắng khóa hướng màn hình nếu trình duyệt di động hỗ trợ
-  try {
-    if (isForced) {
-      if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen().catch(() => {});
-      }
-      if (screen.orientation && screen.orientation.lock) {
-        screen.orientation.lock('landscape').catch(() => {});
-      }
-    }
-  } catch(e) {}
-
-  updateOrientation();
-  setTimeout(resizeCanvases, 60);
-  setTimeout(resizeCanvases, 250);
-}
-
-if (rotateToggle) {
-  rotateToggle.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleForceLandscape();
-  });
-}
-if (hintRotateBtn) {
-  hintRotateBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleForceLandscape();
-  });
-}
-
-function checkOrientationHint() {
-  const isPortrait = !isPhysicalLandscape() && !document.body.classList.contains('force-landscape');
-  if (isPortrait && window.innerWidth <= 768 && !audioStarted) {
-    if (orientationHint) orientationHint.classList.add('show');
-  } else {
-    if (orientationHint) orientationHint.classList.remove('show');
-  }
-}
-
-// Dynamic re-centering of climax heart on rotation
+// Dynamic re-centering of climax heart
 function updateClimaxCoords(w, h) {
   const centerX = w / 2;
   const centerY = h * 0.48;
   const minDim = Math.min(w, h);
-  let heartScale = (w > h) ? (h / 34) : (minDim / 38);
+  let heartScale = minDim / 38;
 
   heartOutlineParticles = [];
   const outlineSteps = 260;
@@ -233,7 +110,8 @@ function updateClimaxCoords(w, h) {
 
 function resizeCanvases() {
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  const { w, h } = getActiveDimensions();
+  const w = window.innerWidth;
+  const h = window.innerHeight;
 
   bgCanvas.width = w * dpr;
   bgCanvas.height = h * dpr;
@@ -250,26 +128,7 @@ function resizeCanvases() {
   }
 }
 
-window.addEventListener('resize', () => {
-  updateOrientation();
-});
-window.addEventListener('orientationchange', () => {
-  updateOrientation();
-  setTimeout(updateOrientation, 100);
-  setTimeout(updateOrientation, 300);
-  setTimeout(updateOrientation, 600);
-});
-if (screen.orientation) {
-  screen.orientation.addEventListener('change', () => {
-    updateOrientation();
-    setTimeout(updateOrientation, 150);
-  });
-}
-if (window.visualViewport) {
-  window.visualViewport.addEventListener('resize', () => {
-    updateOrientation();
-  });
-}
+window.addEventListener('resize', resizeCanvases);
 
 // ===================================================
 // PROCEDURAL ROMANTIC WEB AUDIO SYNTHESIZER
@@ -364,7 +223,6 @@ class RomanticAudioSynthesizer {
 function startAudioExperience() {
   audioStarted = true;
   musicToggle.classList.remove('hide');
-  orientationHint.classList.remove('show');
 
   // Play user's mp3 audio file
   bgMusic.volume = 0.65;
@@ -919,7 +777,7 @@ function animateClimax(now) {
 // INITIALIZATION
 // ===================================================
 window.addEventListener('DOMContentLoaded', () => {
-  updateOrientation();
+  resizeCanvases();
   initBgParticles();
   animateBg();
 });

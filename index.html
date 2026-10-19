@@ -10,34 +10,18 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Caveat:wght@600;700&family=Dancing+Script:wght@600;700&family=Marck+Script&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="style.css?v=rotatefix3">
+  <link rel="stylesheet" href="style.css?v=portraitclean">
 </head>
 <body>
-  <!-- MASTER EXPERIENCE WRAPPER (hỗ trợ xoay ngang tự động & xoay cưỡng bức mượt mà trên iPhone/Safari/Zalo) -->
+  <!-- MASTER EXPERIENCE WRAPPER (Tối ưu chuẩn xem dọc cho mọi dòng điện thoại) -->
   <div id="experience-wrapper" class="experience-wrapper">
     <!-- Canvas background for floating particles, petals, glow sparkles -->
     <canvas id="bg-canvas"></canvas>
 
-    <!-- Floating Audio Controller & Rotate Controller -->
-    <div class="top-nav-controls">
-      <button id="rotate-toggle" class="rotate-btn" aria-label="Xoay ngang màn hình" title="Xoay ngang màn hình">
-        <span class="rotate-icon">🔄</span>
-        <span class="rotate-label">Xoay ngang</span>
-      </button>
-
-      <button id="music-toggle" class="music-btn hide" aria-label="Bật/Tắt nhạc">
-        <span class="music-icon spinning">🎵</span>
-      </button>
-    </div>
-
-    <!-- Orientation Hint (Gentle pill banner for portrait mode with instant rotate button) -->
-    <div id="orientation-hint" class="orientation-hint">
-      <div class="hint-content">
-        <span class="hint-icon">📱↻</span>
-        <span class="hint-text">Xoay ngang xem đẹp như phim</span>
-        <button id="hint-rotate-btn" class="hint-action-btn" type="button">Xoay ngay 🔄</button>
-      </div>
-    </div>
+    <!-- Floating Audio Controller (Góc trên bên phải) -->
+    <button id="music-toggle" class="music-btn hide" aria-label="Bật/Tắt nhạc">
+      <span class="music-icon spinning">🎵</span>
+    </button>
 
     <!-- Audio Element -->
     <audio id="bg-music" loop preload="auto">
@@ -64,10 +48,6 @@
           <span class="btn-text">Chạm nhẹ để bắt đầu</span>
           <span class="pulse-ring"></span>
         </button>
-
-        <div class="intro-landscape-tip">
-          <span>💡 Trải nghiệm ngọt ngào nhất khi xoay ngang màn hình (bật Tự động xoay)</span>
-        </div>
       </div>
     </section>
 
@@ -115,6 +95,6 @@
     </main>
   </div>
 
-  <script src="script.js?v=rotatefix3"></script>
+  <script src="script.js?v=portraitclean"></script>
 </body>
 </html>

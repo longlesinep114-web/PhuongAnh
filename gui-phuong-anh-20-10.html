@@ -73,30 +73,6 @@ body {
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* FORCED LANDSCAPE MODE (Hỗ trợ 100% khi iOS Safari/Zalo/Messenger bị khóa khung nhìn dọc) */
-body.force-landscape {
-  width: 100vw !important;
-  height: 100vh !important;
-  height: 100dvh !important;
-  overflow: hidden !important;
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-}
-
-body.force-landscape .experience-wrapper {
-  position: fixed !important;
-  top: 0 !important;
-  left: 100vw !important;
-  width: 100vh !important;
-  width: 100dvh !important;
-  height: 100vw !important;
-  height: 100dvw !important;
-  transform-origin: 0 0 !important;
-  transform: rotate(90deg) !important;
-  overflow: hidden !important;
-}
-
 /* Background canvas for ambient petals & floating dust */
 #bg-canvas {
   position: absolute;
@@ -120,61 +96,13 @@ body.force-landscape .experience-wrapper {
 }
 
 /* ===================================================
-   TOP NAV CONTROLS (Xoay màn hình & Bật/Tắt nhạc)
+   FLOATING MUSIC BUTTON (Góc trên bên phải)
    =================================================== */
-.top-nav-controls {
-  position: absolute;
-  top: max(14px, env(safe-area-inset-top) + 10px);
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 max(16px, env(safe-area-inset-left) + 12px) 0 max(16px, env(safe-area-inset-left) + 12px);
-  z-index: 100;
-  pointer-events: none;
-}
-
-.top-nav-controls > * {
-  pointer-events: auto;
-}
-
-.rotate-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  border-radius: 24px;
-  background: rgba(30, 20, 32, 0.85);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1.5px solid rgba(255, 107, 139, 0.45);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 107, 139, 0.25);
-  color: #ffffff;
-  font-family: var(--font-body);
-  font-size: 0.82rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.rotate-btn:hover, .rotate-btn:active {
-  transform: scale(1.05);
-  background: rgba(45, 25, 45, 0.95);
-  border-color: rgba(255, 107, 139, 0.8);
-  box-shadow: 0 6px 25px rgba(255, 107, 139, 0.5);
-}
-
-.rotate-icon {
-  font-size: 1rem;
-  line-height: 1;
-}
-
-.rotate-label {
-  letter-spacing: 0.2px;
-}
-
 .music-btn {
+  position: fixed;
+  top: max(16px, env(safe-area-inset-top) + 12px);
+  right: max(16px, env(safe-area-inset-right) + 12px);
+  z-index: 100;
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -208,72 +136,6 @@ body.force-landscape .experience-wrapper {
 @keyframes rotateMusic {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
-}
-
-/* ===================================================
-   ORIENTATION HINT PILL
-   =================================================== */
-.orientation-hint {
-  position: absolute;
-  top: max(60px, env(safe-area-inset-top) + 54px);
-  left: 50%;
-  transform: translateX(-50%) translateY(-140%);
-  z-index: 95;
-  pointer-events: none;
-  opacity: 0;
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.orientation-hint.show {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.hint-content {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background: rgba(30, 20, 32, 0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 107, 139, 0.45);
-  border-radius: 30px;
-  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.65), 0 0 15px rgba(255, 107, 139, 0.25);
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #ffffff;
-}
-
-.hint-action-btn {
-  background: linear-gradient(135deg, #ff4071, #ff7597);
-  border: none;
-  color: #fff;
-  font-weight: 700;
-  font-size: 0.78rem;
-  padding: 4px 10px;
-  border-radius: 14px;
-  cursor: pointer;
-  margin-left: 4px;
-  box-shadow: 0 2px 10px rgba(255, 64, 113, 0.5);
-  transition: transform 0.2s ease;
-  white-space: nowrap;
-}
-
-.hint-action-btn:active {
-  transform: scale(0.95);
-}
-
-.hint-icon {
-  font-size: 1.1rem;
-  animation: wiggle 2s infinite ease-in-out;
-}
-
-@keyframes wiggle {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-15deg); }
-  75% { transform: rotate(15deg); }
 }
 
 /* ===================================================
@@ -895,335 +757,80 @@ body.force-landscape .experience-wrapper {
 }
 
 /* ===================================================
-   RESPONSIVE DESIGN & LANDSCAPE CINEMA MODE
-   Adapts flawlessly to ALL phones (iPhone SE, 11-16 Pro/Max,
-   Samsung, Xiaomi, etc.) in both Portrait & Landscape
+   RESPONSIVE DESIGN (Tối ưu chuẩn xem dọc cho mọi dòng điện thoại)
    =================================================== */
 
-/* --- 1. LANDSCAPE MODE (Xoay ngang màn hình - Cinema Mode) --- */
-@media (orientation: landscape), (min-aspect-ratio: 13/10) {
-  .orientation-hint {
-    display: none !important;
-  }
-
-  /* Stage 1: Intro Card in Landscape - 2 Cột gọn gàng, không tràn màn hình */
-  .intro-card {
-    max-width: 660px;
-    width: 90%;
-    max-height: 88dvh;
-    padding: clamp(14px, 3.5vh, 24px) clamp(20px, 4vw, 36px);
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-rows: auto auto auto;
-    align-items: center;
-    column-gap: clamp(18px, 3.5vw, 28px);
-    row-gap: clamp(6px, 1.5vh, 10px);
-    text-align: left;
-    animation: none;
-  }
-
-  .intro-avatar-wrapper {
-    grid-row: 1 / span 3;
-    grid-column: 1;
-    width: clamp(85px, 22vh, 120px);
-    height: clamp(85px, 22vh, 120px);
-    margin-bottom: 0;
-  }
-
-  .intro-title {
-    grid-column: 2;
-    font-size: clamp(1.6rem, 5vh, 2.15rem);
-    line-height: 1.15;
-  }
-
-  .intro-subtitle {
-    grid-column: 2;
-    font-size: clamp(0.82rem, 2.8vh, 0.95rem);
-    max-width: 440px;
-    line-height: 1.45;
-  }
-
-  .start-btn {
-    grid-column: 2;
-    justify-self: start;
-    padding: clamp(8px, 2vh, 12px) clamp(18px, 4vw, 28px);
-    font-size: clamp(0.85rem, 2.8vh, 1rem);
-    margin-top: 2px;
-  }
-
-  .intro-landscape-tip {
-    display: none !important;
-  }
-
-  /* Stage 2: Story Narrative Text in Landscape (Thước phim điện ảnh) */
-  .story-layout {
-    width: 100%;
-    max-width: 900px;
-    padding: 0 clamp(16px, 4vw, 32px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .story-message-container {
-    width: 100%;
-    max-width: 860px;
-  }
-
-  .narrative-text {
-    font-size: clamp(1.65rem, 5.8vh, 2.45rem);
-    line-height: 1.75;
-    letter-spacing: 0.6px;
-  }
-
-  /* Stage 3: Climax Heart & Proposal in Landscape */
-  .proposal-wrapper {
-    width: 90%;
-    max-width: 580px;
-  }
-
-  .proposal-box {
-    padding: 6px 12px;
-  }
-
-  .final-lead-name {
-    font-size: clamp(1.1rem, 3.5vh, 1.35rem);
-    margin-bottom: 2px;
-  }
-
-  .final-proposal-text {
-    font-size: clamp(1.5rem, 5.5vh, 2.2rem);
-    gap: 8px;
-    line-height: 1.25;
-  }
-
-  .proposal-actions {
-    margin-top: clamp(8px, 2vh, 14px);
-    gap: clamp(8px, 2vw, 14px);
-  }
-
-  .choice-btn {
-    padding: clamp(7px, 2vh, 11px) clamp(16px, 3vw, 24px);
-    font-size: clamp(0.82rem, 2.8vh, 0.95rem);
-    min-height: 38px;
-  }
-
-  .accepted-message {
-    margin-top: 8px;
-    padding: 10px 16px;
-  }
-
-  .sweet-quote {
-    font-size: 0.88rem;
-    line-height: 1.4;
-  }
-}
-
-/* ÁP DỤNG TRỰC TIẾP CHO CLASS IS-LANDSCAPE & FORCE-LANDSCAPE (Dành cho iOS Safari / Zalo / Messenger) */
-body.is-landscape .orientation-hint,
-body.force-landscape .orientation-hint {
-  display: none !important;
-}
-
-body.is-landscape .intro-card,
-body.force-landscape .intro-card {
-  max-width: 660px !important;
-  width: 90% !important;
-  max-height: 88dvh !important;
-  padding: clamp(14px, 3.5vh, 24px) clamp(20px, 4vw, 36px) !important;
-  display: grid !important;
-  grid-template-columns: auto 1fr !important;
-  grid-template-rows: auto auto auto !important;
-  align-items: center !important;
-  column-gap: clamp(18px, 3.5vw, 28px) !important;
-  row-gap: clamp(6px, 1.5vh, 10px) !important;
-  text-align: left !important;
-  animation: none !important;
-}
-
-body.is-landscape .intro-avatar-wrapper,
-body.force-landscape .intro-avatar-wrapper {
-  grid-row: 1 / span 3 !important;
-  grid-column: 1 !important;
-  width: clamp(85px, 22vh, 120px) !important;
-  height: clamp(85px, 22vh, 120px) !important;
-  margin-bottom: 0 !important;
-}
-
-body.is-landscape .intro-title,
-body.force-landscape .intro-title {
-  grid-column: 2 !important;
-  font-size: clamp(1.6rem, 5vh, 2.15rem) !important;
-  line-height: 1.15 !important;
-}
-
-body.is-landscape .intro-subtitle,
-body.force-landscape .intro-subtitle {
-  grid-column: 2 !important;
-  font-size: clamp(0.82rem, 2.8vh, 0.95rem) !important;
-  max-width: 440px !important;
-  line-height: 1.45 !important;
-}
-
-body.is-landscape .start-btn,
-body.force-landscape .start-btn {
-  grid-column: 2 !important;
-  justify-self: start !important;
-  padding: clamp(8px, 2vh, 12px) clamp(18px, 4vw, 28px) !important;
-  font-size: clamp(0.85rem, 2.8vh, 1rem) !important;
-  margin-top: 2px !important;
-}
-
-body.is-landscape .intro-landscape-tip,
-body.force-landscape .intro-landscape-tip {
-  display: none !important;
-}
-
-body.is-landscape .story-layout,
-body.force-landscape .story-layout {
-  width: 100% !important;
-  max-width: 900px !important;
-  padding: 0 clamp(16px, 4vw, 32px) !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-body.is-landscape .story-message-container,
-body.force-landscape .story-message-container {
-  width: 100% !important;
-  max-width: 860px !important;
-}
-
-body.is-landscape .narrative-text,
-body.force-landscape .narrative-text {
-  font-size: clamp(1.65rem, 5.8vh, 2.45rem) !important;
-  line-height: 1.75 !important;
-  letter-spacing: 0.6px !important;
-}
-
-body.is-landscape .proposal-wrapper,
-body.force-landscape .proposal-wrapper {
-  width: 90% !important;
-  max-width: 580px !important;
-}
-
-body.is-landscape .proposal-box,
-body.force-landscape .proposal-box {
-  padding: 6px 12px !important;
-}
-
-body.is-landscape .final-lead-name,
-body.force-landscape .final-lead-name {
-  font-size: clamp(1.1rem, 3.5vh, 1.35rem) !important;
-  margin-bottom: 2px !important;
-}
-
-body.is-landscape .final-proposal-text,
-body.force-landscape .final-proposal-text {
-  font-size: clamp(1.5rem, 5.5vh, 2.2rem) !important;
-  gap: 8px !important;
-  line-height: 1.25 !important;
-}
-
-body.is-landscape .proposal-actions,
-body.force-landscape .proposal-actions {
-  margin-top: clamp(8px, 2vh, 14px) !important;
-  gap: clamp(8px, 2vw, 14px) !important;
-}
-
-body.is-landscape .choice-btn,
-body.force-landscape .choice-btn {
-  padding: clamp(7px, 2vh, 11px) clamp(16px, 3vw, 24px) !important;
-  font-size: clamp(0.82rem, 2.8vh, 0.95rem) !important;
-  min-height: 38px !important;
-}
-
-body.is-landscape .accepted-message,
-body.force-landscape .accepted-message {
-  margin-top: 8px !important;
-  padding: 10px 16px !important;
-}
-
-body.is-landscape .sweet-quote,
-body.force-landscape .sweet-quote {
-  font-size: 0.88rem !important;
-  line-height: 1.4 !important;
-}
-
-/* --- 2. MOBILE PORTRAIT (Điện thoại màn hình dọc: iPhone 11-16, Samsung Galaxy, Xiaomi...) --- */
-@media (max-width: 768px) and (orientation: portrait) {
-  body:not(.is-landscape):not(.force-landscape) .screen-view {
+/* --- 1. MOBILE PHONES (iPhone 11-16, Samsung Galaxy, Xiaomi...) --- */
+@media (max-width: 768px) {
+  .screen-view {
     padding: max(16px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
   }
 
-  body:not(.is-landscape):not(.force-landscape) .intro-card {
+  .intro-card {
     width: 92%;
     max-width: 390px;
     padding: clamp(26px, 5vh, 36px) clamp(16px, 4vw, 24px);
     gap: clamp(12px, 2.2vh, 16px);
   }
 
-  body:not(.is-landscape):not(.force-landscape) .intro-avatar-wrapper {
+  .intro-avatar-wrapper {
     width: clamp(105px, 28vw, 125px);
     height: clamp(105px, 28vw, 125px);
   }
 
-  body:not(.is-landscape):not(.force-landscape) .intro-title {
+  .intro-title {
     font-size: clamp(1.75rem, 6vw, 2.1rem);
   }
 
-  body:not(.is-landscape):not(.force-landscape) .intro-subtitle {
+  .intro-subtitle {
     font-size: clamp(0.85rem, 3.2vw, 0.95rem);
     line-height: 1.5;
   }
 
-  body:not(.is-landscape):not(.force-landscape) .start-btn {
+  .start-btn {
     padding: 12px 24px;
     font-size: clamp(0.92rem, 3.5vw, 1.02rem);
     min-height: 48px;
   }
 
-  body:not(.is-landscape):not(.force-landscape) .story-layout {
+  .story-layout {
     width: 100%;
-    padding: 0 12px;
+    padding: 0 16px;
   }
 
-  body:not(.is-landscape):not(.force-landscape) .story-message-container {
+  .story-message-container {
     width: 100%;
     max-width: 95vw;
   }
 
-  body:not(.is-landscape):not(.force-landscape) .narrative-text {
-    font-size: clamp(1.45rem, 5vw, 1.85rem);
-    line-height: 1.7;
+  .narrative-text {
+    font-size: clamp(1.48rem, 5.2vw, 1.95rem);
+    line-height: 1.75;
     letter-spacing: 0.4px;
   }
 
-  body:not(.is-landscape):not(.force-landscape) .proposal-wrapper {
+  .proposal-wrapper {
     width: 94%;
     max-width: 440px;
   }
 
-  body:not(.is-landscape):not(.force-landscape) .final-lead-name {
+  .final-lead-name {
     font-size: 1.25rem;
   }
 
-  body:not(.is-landscape):not(.force-landscape) .final-proposal-text {
+  .final-proposal-text {
     font-size: clamp(1.65rem, 6.2vw, 2.15rem);
     gap: 6px;
     line-height: 1.3;
   }
 
-  body:not(.is-landscape):not(.force-landscape) .proposal-actions {
+  .proposal-actions {
     gap: 10px;
     flex-wrap: wrap;
     justify-content: center;
   }
 
-  body:not(.is-landscape):not(.force-landscape) .choice-btn {
+  .choice-btn {
     padding: 11px 22px;
     font-size: 0.95rem;
     min-width: 135px;
@@ -1231,42 +838,42 @@ body.force-landscape .sweet-quote {
   }
 }
 
-/* --- 3. SMALL PHONES (iPhone SE, iPhone mini, máy nhỏ <= 380px) --- */
-@media (max-width: 380px) and (orientation: portrait) {
-  body:not(.is-landscape):not(.force-landscape) .intro-card {
+/* --- 2. SMALL PHONES (iPhone SE, iPhone mini, máy nhỏ <= 380px) --- */
+@media (max-width: 380px) {
+  .intro-card {
     padding: 22px 14px;
     gap: 10px;
   }
 
-  body:not(.is-landscape):not(.force-landscape) .intro-avatar-wrapper {
+  .intro-avatar-wrapper {
     width: 95px;
     height: 95px;
   }
 
-  body:not(.is-landscape):not(.force-landscape) .intro-title {
+  .intro-title {
     font-size: 1.65rem;
   }
 
-  body:not(.is-landscape):not(.force-landscape) .intro-subtitle {
+  .intro-subtitle {
     font-size: 0.82rem;
   }
 
-  body:not(.is-landscape):not(.force-landscape) .start-btn {
+  .start-btn {
     padding: 10px 20px;
     font-size: 0.88rem;
     min-height: 42px;
   }
 
-  body:not(.is-landscape):not(.force-landscape) .narrative-text {
+  .narrative-text {
     font-size: 1.35rem;
     line-height: 1.6;
   }
 
-  body:not(.is-landscape):not(.force-landscape) .final-proposal-text {
+  .final-proposal-text {
     font-size: 1.55rem;
   }
 
-  body:not(.is-landscape):not(.force-landscape) .choice-btn {
+  .choice-btn {
     padding: 9px 16px;
     font-size: 0.86rem;
     min-width: 120px;
@@ -1277,31 +884,15 @@ body.force-landscape .sweet-quote {
 </style>
 </head>
 <body>
-  <!-- MASTER EXPERIENCE WRAPPER (hỗ trợ xoay ngang tự động & xoay cưỡng bức mượt mà trên iPhone/Safari/Zalo) -->
+  <!-- MASTER EXPERIENCE WRAPPER (Tối ưu chuẩn xem dọc cho mọi dòng điện thoại) -->
   <div id="experience-wrapper" class="experience-wrapper">
     <!-- Canvas background for floating particles, petals, glow sparkles -->
     <canvas id="bg-canvas"></canvas>
 
-    <!-- Floating Audio Controller & Rotate Controller -->
-    <div class="top-nav-controls">
-      <button id="rotate-toggle" class="rotate-btn" aria-label="Xoay ngang màn hình" title="Xoay ngang màn hình">
-        <span class="rotate-icon">🔄</span>
-        <span class="rotate-label">Xoay ngang</span>
-      </button>
-
-      <button id="music-toggle" class="music-btn hide" aria-label="Bật/Tắt nhạc">
-        <span class="music-icon spinning">🎵</span>
-      </button>
-    </div>
-
-    <!-- Orientation Hint (Gentle pill banner for portrait mode with instant rotate button) -->
-    <div id="orientation-hint" class="orientation-hint">
-      <div class="hint-content">
-        <span class="hint-icon">📱↻</span>
-        <span class="hint-text">Xoay ngang xem đẹp như phim</span>
-        <button id="hint-rotate-btn" class="hint-action-btn" type="button">Xoay ngay 🔄</button>
-      </div>
-    </div>
+    <!-- Floating Audio Controller (Góc trên bên phải) -->
+    <button id="music-toggle" class="music-btn hide" aria-label="Bật/Tắt nhạc">
+      <span class="music-icon spinning">🎵</span>
+    </button>
 
     <!-- Audio Element -->
     <audio id="bg-music" loop preload="auto">
@@ -1328,10 +919,6 @@ body.force-landscape .sweet-quote {
           <span class="btn-text">Chạm nhẹ để bắt đầu</span>
           <span class="pulse-ring"></span>
         </button>
-
-        <div class="intro-landscape-tip">
-          <span>💡 Trải nghiệm ngọt ngào nhất khi xoay ngang màn hình (bật Tự động xoay)</span>
-        </div>
       </div>
     </section>
 
@@ -1432,12 +1019,6 @@ const bgCtx = bgCanvas.getContext('2d');
 const heartCanvas = document.getElementById('heart-canvas');
 const heartCtx = heartCanvas.getContext('2d');
 
-const experienceWrapper = document.getElementById('experience-wrapper');
-const rotateToggle = document.getElementById('rotate-toggle');
-const rotateLabel = rotateToggle ? rotateToggle.querySelector('.rotate-label') : null;
-const rotateIcon = rotateToggle ? rotateToggle.querySelector('.rotate-icon') : null;
-const hintRotateBtn = document.getElementById('hint-rotate-btn');
-
 const introScreen = document.getElementById('intro-screen');
 const storyScreen = document.getElementById('story-screen');
 const climaxScreen = document.getElementById('climax-screen');
@@ -1445,7 +1026,6 @@ const climaxScreen = document.getElementById('climax-screen');
 const startBtn = document.getElementById('start-btn');
 const musicToggle = document.getElementById('music-toggle');
 const bgMusic = document.getElementById('bg-music');
-const orientationHint = document.getElementById('orientation-hint');
 
 const narrativeTextEl = document.getElementById('narrative-text');
 
@@ -1461,134 +1041,18 @@ let isAudioMuted = false;
 let webAudioSynthesizer = null;
 
 // ===================================================
-// VIEWPORT & ORIENTATION HANDLING (HỖ TRỢ IPHONE & WEBVIEW ZALO)
+// CANVAS & RESIZE HANDLING (TỐI ƯU MƯỢT MÀ CHUẨN MÀN HÌNH DỌC)
 // ===================================================
 function getActiveDimensions() {
-  const isForced = document.body.classList.contains('force-landscape');
-  let w = window.innerWidth;
-  let h = window.innerHeight;
-  if (isForced && w < h) {
-    return { w: h, h: w };
-  }
-  return { w, h };
+  return { w: window.innerWidth, h: window.innerHeight };
 }
 
-function isPhysicalLandscape() {
-  const w = window.innerWidth;
-  const h = window.innerHeight;
-  let angle = 0;
-  if (screen.orientation && typeof screen.orientation.angle === 'number') {
-    angle = screen.orientation.angle;
-  } else if (typeof window.orientation === 'number') {
-    angle = window.orientation;
-  }
-  const isAngleLandscape = Math.abs(angle) === 90 || Math.abs(angle) === 270;
-  const isAspectLandscape = w > h;
-
-  return isAspectLandscape || isAngleLandscape;
-}
-
-function updateOrientation() {
-  const physicalLandscape = isPhysicalLandscape();
-  const isForced = document.body.classList.contains('force-landscape');
-
-  if (physicalLandscape) {
-    // Trình duyệt hoặc hệ điều hành đã tự xoay sang ngang
-    document.body.classList.remove('force-landscape');
-    if (experienceWrapper) {
-      experienceWrapper.style.width = '';
-      experienceWrapper.style.height = '';
-    }
-    document.body.classList.add('is-landscape');
-    if (rotateLabel) rotateLabel.textContent = "Toàn cảnh ✨";
-    if (rotateIcon) rotateIcon.textContent = "📱";
-    if (orientationHint) orientationHint.classList.remove('show');
-  } else {
-    if (isForced) {
-      document.body.classList.add('is-landscape');
-      if (rotateLabel) rotateLabel.textContent = "Xem dọc";
-      if (rotateIcon) rotateIcon.textContent = "📱";
-      if (orientationHint) orientationHint.classList.remove('show');
-    } else {
-      document.body.classList.remove('is-landscape');
-      if (experienceWrapper) {
-        experienceWrapper.style.width = '';
-        experienceWrapper.style.height = '';
-      }
-      if (rotateLabel) rotateLabel.textContent = "Xoay ngang";
-      if (rotateIcon) rotateIcon.textContent = "🔄";
-      checkOrientationHint();
-    }
-  }
-
-  resizeCanvases();
-}
-
-function toggleForceLandscape() {
-  if (isPhysicalLandscape()) {
-    return;
-  }
-  const isForced = document.body.classList.toggle('force-landscape');
-
-  if (isForced) {
-    const screenH = Math.max(window.innerHeight, window.innerWidth);
-    const screenW = Math.min(window.innerHeight, window.innerWidth);
-    if (experienceWrapper) {
-      experienceWrapper.style.width = screenH + 'px';
-      experienceWrapper.style.height = screenW + 'px';
-    }
-  } else {
-    if (experienceWrapper) {
-      experienceWrapper.style.width = '';
-      experienceWrapper.style.height = '';
-    }
-  }
-
-  // Cố gắng khóa hướng màn hình nếu trình duyệt di động hỗ trợ
-  try {
-    if (isForced) {
-      if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen().catch(() => {});
-      }
-      if (screen.orientation && screen.orientation.lock) {
-        screen.orientation.lock('landscape').catch(() => {});
-      }
-    }
-  } catch(e) {}
-
-  updateOrientation();
-  setTimeout(resizeCanvases, 60);
-  setTimeout(resizeCanvases, 250);
-}
-
-if (rotateToggle) {
-  rotateToggle.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleForceLandscape();
-  });
-}
-if (hintRotateBtn) {
-  hintRotateBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleForceLandscape();
-  });
-}
-
-function checkOrientationHint() {
-  const isPortrait = !isPhysicalLandscape() && !document.body.classList.contains('force-landscape');
-  if (isPortrait && window.innerWidth <= 768 && !audioStarted) {
-    if (orientationHint) orientationHint.classList.add('show');
-  } else {
-    if (orientationHint) orientationHint.classList.remove('show');
-  }
-}
-
-// Dynamic re-centering of climax heart on rotation
+// Dynamic re-centering of climax heart
 function updateClimaxCoords(w, h) {
   const centerX = w / 2;
   const centerY = h * 0.48;
   const minDim = Math.min(w, h);
-  let heartScale = (w > h) ? (h / 34) : (minDim / 38);
+  let heartScale = minDim / 38;
 
   heartOutlineParticles = [];
   const outlineSteps = 260;
@@ -1615,7 +1079,8 @@ function updateClimaxCoords(w, h) {
 
 function resizeCanvases() {
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  const { w, h } = getActiveDimensions();
+  const w = window.innerWidth;
+  const h = window.innerHeight;
 
   bgCanvas.width = w * dpr;
   bgCanvas.height = h * dpr;
@@ -1632,26 +1097,7 @@ function resizeCanvases() {
   }
 }
 
-window.addEventListener('resize', () => {
-  updateOrientation();
-});
-window.addEventListener('orientationchange', () => {
-  updateOrientation();
-  setTimeout(updateOrientation, 100);
-  setTimeout(updateOrientation, 300);
-  setTimeout(updateOrientation, 600);
-});
-if (screen.orientation) {
-  screen.orientation.addEventListener('change', () => {
-    updateOrientation();
-    setTimeout(updateOrientation, 150);
-  });
-}
-if (window.visualViewport) {
-  window.visualViewport.addEventListener('resize', () => {
-    updateOrientation();
-  });
-}
+window.addEventListener('resize', resizeCanvases);
 
 // ===================================================
 // PROCEDURAL ROMANTIC WEB AUDIO SYNTHESIZER
@@ -1746,7 +1192,6 @@ class RomanticAudioSynthesizer {
 function startAudioExperience() {
   audioStarted = true;
   musicToggle.classList.remove('hide');
-  orientationHint.classList.remove('show');
 
   // Play user's mp3 audio file
   bgMusic.volume = 0.65;
@@ -2301,7 +1746,7 @@ function animateClimax(now) {
 // INITIALIZATION
 // ===================================================
 window.addEventListener('DOMContentLoaded', () => {
-  updateOrientation();
+  resizeCanvases();
   initBgParticles();
   animateBg();
 });

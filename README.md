@@ -1,66 +1,40 @@
-# Hướng Dẫn Tùy Chỉnh & Đưa Lên Mạng (Deploy) Trang Web Tỏ Tình Phương Anh 🌸
+# HƯỚNG DẪN ĐƯA TRANG WEB LÊN GITHUB & LẤY LINK TẶNG PHƯƠNG ANH
 
-Trang web đã được thiết kế hoàn chỉnh theo tiêu chuẩn **Mobile-First & Cinematic Landscape**, tối ưu từng mili-giây hiệu ứng, hỗ trợ font tiếng Việt tinh tế và nhạc nền êm dịu.
-
----
-
-## 1. Cấu Trúc Thư Mục
-```text
-my-workspace/
-├── index.html          # Khung giao diện HTML5 chuẩn responsive
-├── style.css           # Hiệu ứng pastel pink mộng mơ, glassmorphism, cinematic landscape
-├── script.js           # Xử lý gõ chữ (typing), chuyển cảnh, hạt tim bay lấp đầy trái tim & nhạc
-├── assets/
-│   ├── phuong-anh.jpg  # Ảnh chân dung của Phương Anh (bạn thay ảnh thật vào đây)
-│   └── love-song.mp3   # File nhạc tình cảm (nếu muốn dùng bài nhạc yêu thích)
-└── README.md           # Hướng dẫn chi tiết
-```
+### Cách nhanh nhất và không bao giờ lỗi (Khuyên dùng):
+Chỉ cần dùng đúng 1 file `index.html` nằm ngay trong thư mục này!
 
 ---
 
-## 2. Cách Thay Ảnh & Thay Nhạc
-
-### 🌸 Thay ảnh của Phương Anh:
-- Chuẩn bị 1 tấm ảnh xinh nhất của Phương Anh (ảnh vuông hoặc dọc 1:1, 4:5 hoặc 9:16 đều đẹp).
-- Đổi tên file thành `phuong-anh.jpg` và dán đè vào thư mục `assets/` (thay thế cho file mẫu hiện tại).
-- Nếu ảnh đuôi `.png` hoặc `.jpeg`, bạn chỉ cần đổi lại đuôi trong `index.html` tại 2 chỗ: `src="assets/phuong-anh.jpg"`.
-
-### 🎵 Thay nhạc nền theo sở thích:
-- Tải file bài hát tình cảm (nhạc cụ piano, bản ballad nhẹ nhàng hoặc bài hát kỷ niệm của 2 bạn) dưới dạng đuôi `.mp3`.
-- Đổi tên file thành `love-song.mp3` và copy vào thư mục `assets/`.
-- *Lưu ý:* Trang web đã tích hợp sẵn **bộ tổng hợp âm thanh Web Audio Romantic Synthesizer**, tức là ngay cả khi chưa kịp thêm file mp3 hoặc mạng tải chậm, hệ thống vẫn tự động đàn giai điệu tình ca lãng mạn du dương mà không bao giờ bị im lặng!
+### BƯỚC 1: TẠO REPOSITORY TRÊN GITHUB
+1. Đăng nhập vào tài khoản của bạn trên https://github.com
+2. Bấm vào dấu `+` ở góc trên bên phải -> Chọn **New repository**.
+3. Điền thông tin:
+   - **Repository name:** ví dụ đặt là `tang-phuong-anh` (hoặc `gui-phuong-anh`)
+   - Chọn chế độ: **Public** (Bắt buộc chọn Public để dùng GitHub Pages miễn phí).
+   - Tích chọn: **Add a README file**.
+4. Bấm nút xanh **Create repository**.
 
 ---
 
-## 3. Cách Đưa Lên Link Online (Deploy Miễn Phí, Cực Nhanh Trong 1 Phút)
-
-Để gửi đường link qua **Zalo / Messenger / Instagram / iMessage** cho cô ấy:
-
-### Cách 1: Vercel (Khuyên dùng - Nhanh & Mượt nhất)
-1. Truy cập [vercel.com](https://vercel.com) và đăng nhập (bằng GitHub, Google hoặc Email).
-2. Kéo thả toàn bộ thư mục `my-workspace` vào khung tải lên của Vercel.
-3. Nhấn **Deploy**. Chỉ sau 15 giây, bạn sẽ nhận được đường link dạng `https://gui-phuong-anh.vercel.app`.
-
-### Cách 2: Netlify Drop (Không cần cài đặt, kéo thả ăn ngay)
-1. Mở trình duyệt vào [app.netlify.com/drop](https://app.netlify.com/drop).
-2. Kéo thả cả thư mục `my-workspace` thả vào giữa trang web.
-3. Đợi 10 giây là bạn có ngay 1 đường link online công khai để gửi cho cô ấy.
-
-### Cách 3: GitHub Pages
-1. Tạo 1 repository mới trên GitHub (ví dụ: `gui-phuong-anh`).
-2. Upload toàn bộ các file `index.html`, `style.css`, `script.js` và thư mục `assets/` lên repo.
-3. Vào mục **Settings** -> **Pages** -> chọn nhánh `main` / `root` -> **Save**.
-4. Đường link sẽ có dạng: `https://<ten-user>.github.io/gui-phuong-anh/`.
+### BƯỚC 2: TẢI FILE LÊN GITHUB
+1. Trong trang repository vừa tạo, bấm nút **Add file** -> Chọn **Upload files**.
+2. Kéo thả file **`index.html`** (nằm ngay ngoài thư mục `UP-LEN-GITHUB`) vào khung tải lên của GitHub.
+3. Kéo xuống dưới bấm nút xanh **Commit changes**.
 
 ---
 
-## 4. Các Điểm Nổi Bật Đã Được Tối Ưu Cho Phương Anh:
-1. **Flow cảm xúc kể chuyện:** 
-   - Màn hình đón chào mộng mơ với lời dẫn “*Chạm nhẹ để bắt đầu*”.
-   - 4 câu tỏ tình gõ chữ (typing effect) nhẹ nhàng, sâu lắng, ngắt nhịp 2 giây mỗi câu để đọc trọn cảm xúc.
-2. **Khoảnh khắc Climax (Điểm nhấn lớn nhất):**
-   - Trái tim lớn viền trắng phát sáng kỳ ảo ở trung tâm.
-   - Hơn 350 trái tim đỏ mini từ bốn phía bay vào, lấp đầy trái tim rỗng như rót đầy tình yêu.
-   - Câu tỏ tình **“Em làm người yêu anh nhé.”** hiện dần ở chính giữa trái tim cùng 2 nút phản hồi cực dễ thương: *“Đồng ý nha 💖”* và *“Dạ vâng ạ 🙈”*.
-3. **Trải nghiệm xoay ngang (Cinematic Landscape):**
-   - Tối ưu đặc biệt cho điện thoại: khi xoay ngang, màn hình chia bố cục như một khung phim điện ảnh (ảnh bên trái, tâm sự bên phải), trái tim lớn căn chuẩn tâm và không bao giờ bị reload hay gián đoạn trải nghiệm.
+### BƯỚC 3: BẬT GITHUB PAGES ĐỂ LẤY LINK
+1. Trong repository đó, bấm vào mục **Settings** (biểu tượng bánh răng ở thanh menu trên).
+2. Ở cột bên trái, tìm và bấm vào mục **Pages** (hoặc cuộn xuống tìm GitHub Pages).
+3. Tại phần **Build and deployment**:
+   - Ở mục **Branch**: Chọn `main` (hoặc `master`).
+   - Thư mục bên cạnh giữ nguyên: `/ (root)`.
+   - Bấm nút **Save**.
+4. Chờ khoảng 30 giây đến 1 phút rồi F5 (tải lại trang), bạn sẽ thấy hiện dòng link màu xanh:
+   👉 **`Your site is live at: https://<tên-github-của-bạn>.github.io/tang-phuong-anh/`**
+
+---
+
+### BƯỚC 4: HOÀN TẤT
+Bạn chỉ cần copy đường link `https://<tên-github-của-bạn>.github.io/tang-phuong-anh/` đó và gửi cho Phương Anh!
+Phương Anh mở trên điện thoại (iPhone/Android) hay máy tính là xem được ngay lập tức, có nhạc, có hoa đào rơi và trái tim lấp lánh hoàn hảo!

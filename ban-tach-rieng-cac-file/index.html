@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Gửi Phương Anh 💗 20/10</title>
+  
+  <!-- Google Fonts: Calligraphy handwriting + Romantic Serif -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Caveat:wght@600;700&family=Dancing+Script:wght@600;700&family=Marck+Script&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css?v=pureportrait_v2">
+</head>
+<body>
+  <!-- MASTER EXPERIENCE WRAPPER (Tối ưu chuẩn xem dọc cho mọi dòng điện thoại) -->
+  <div id="experience-wrapper" class="experience-wrapper">
+    <!-- Canvas background for floating particles, petals, glow sparkles -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Floating Audio Controller (Góc trên bên phải) -->
+    <button id="music-toggle" class="music-btn hide" aria-label="Bật/Tắt nhạc">
+      <span class="music-icon spinning">🎵</span>
+    </button>
+
+    <!-- Audio Element -->
+    <audio id="bg-music" loop preload="auto">
+      <source src="assets/love-song.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- MAIN WRAPPER -->
+    <main id="app-container" class="app-container">
+    
+    <!-- STAGE 1: INTRO / TOUCH TO START SCREEN -->
+    <section id="intro-screen" class="screen-view active">
+      <div class="intro-card glass-panel">
+        <div class="intro-avatar-wrapper">
+          <div class="avatar-glow-ring"></div>
+          <img id="intro-avatar" src="assets/phuong-anh.jpg" alt="Phương Anh" class="intro-avatar-img" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'160\' height=\'160\' viewBox=\'0 0 160 160\'><defs><linearGradient id=\'g\' x1=\'0%\' y1=\'0%\' x2=\'100%\' y2=\'100%\'><stop offset=\'0%\' stop-color=\'%23ff9a9e\'/><stop offset=\'100%\' stop-color=\'%23fecfef\'/></linearGradient></defs><rect width=\'100%\' height=\'100%\' rx=\'80\' fill=\'url(%23g)\'/><text x=\'50%\' y=\'52%\' font-size=\'48\' text-anchor=\'middle\' dominant-baseline=\'central\' fill=\'white\'>🌸</text></svg>';">
+          <div class="avatar-badge">20/10</div>
+        </div>
+        
+        <h1 class="intro-title">Gửi Phương Anh</h1>
+        <p class="intro-subtitle">Gửi đến em những điều dịu dàng và ấm áp nhất ngày 20/10...</p>
+
+        <button id="start-btn" class="start-btn">
+          <span class="btn-heart">💖</span>
+          <span class="btn-text">Chạm nhẹ để bắt đầu</span>
+          <span class="pulse-ring"></span>
+        </button>
+      </div>
+    </section>
+
+    <!-- STAGE 2: STORYTELLING / MESSAGES SCREEN -->
+    <section id="story-screen" class="screen-view">
+      <div class="story-layout">
+        <!-- Pure Floating Text Container (No Card / No Box) -->
+        <div class="story-message-container">
+          <div id="narrative-text" class="narrative-text"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAGE 3: CLIMAX SCREEN (BIG HOLLOW HEART + FILLING PARTICLES + PROPOSAL) -->
+    <section id="climax-screen" class="screen-view">
+      <!-- Heart Filling Canvas -->
+      <canvas id="heart-canvas"></canvas>
+
+      <!-- Center text proposal inside heart (Trái tim làm nền, chữ nổi bật ở giữa) -->
+      <div id="proposal-wrapper" class="proposal-wrapper">
+        <div class="proposal-box">
+          <div id="final-lead-name" class="final-lead-name">Phanh àa...</div>
+          <h2 id="final-proposal-text" class="final-proposal-text">
+            <span class="prop-main-line">Chúc Phanh 20/10 thật hạnh phúc</span>
+            <span class="prop-heart-icon">❤️</span>
+          </h2>
+          <!-- 2 nút nhận lời chúc ngọt ngào: "Cảm ơn anh" và "Em nhận lời chúc nha" -->
+          <div id="proposal-actions" class="proposal-actions">
+            <button id="btn-agree" class="choice-btn agree-btn">
+              <span>Cảm ơn anh 💖</span>
+            </button>
+            <button id="btn-shy" class="choice-btn shy-btn">
+              <span>Em nhận lời chúc nha 💕</span>
+            </button>
+          </div>
+          <!-- Lời nhắn chúc mừng ngọt ngào sau khi bấm -->
+          <div id="accepted-message" class="accepted-message hide">
+            <p class="sweet-quote">“Mong em luôn vui vẻ, bình an và được yêu thương thật nhiều mỗi ngày.”</p>
+            <span class="couple-tag">Dành tặng Phanh 💕 20/10</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    </main>
+  </div>
+
+  <script src="script.js?v=pureportrait_v2"></script>
+</body>
+</html>

@@ -1,0 +1,862 @@
+/* ===================================================
+   VARIABLES & PALETTE (Soft Pastel Romantic Pink)
+   =================================================== */
+:root {
+  --primary-pink: #ff6b8b;
+  --soft-pink: #ffd3db;
+  --blush-pink: #ff7597;
+  --deep-rose: #ff2a5f;
+  --heart-red: #ff1a53;
+  --glow-pink: rgba(255, 107, 139, 0.55);
+  --glass-bg: rgba(20, 16, 25, 0.72);
+  --glass-border: rgba(255, 180, 205, 0.25);
+  --text-dark: #ffffff;
+  --text-soft: #f3c2cf;
+  --font-body: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-script: 'Alex Brush', 'Dancing Script', cursive;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 35%, #180b14 0%, #0d070c 50%, #050205 100%);
+  font-family: var(--font-body);
+  color: var(--text-dark);
+  position: relative;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+}
+
+/* Safe area insets for notches & home bars */
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* MASTER WRAPPER */
+.experience-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Background canvas for ambient petals & floating dust */
+#bg-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Climax heart filling canvas */
+#heart-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ===================================================
+   FLOATING MUSIC BUTTON (Góc trên bên phải)
+   =================================================== */
+.music-btn {
+  position: fixed;
+  top: max(16px, env(safe-area-inset-top) + 12px);
+  right: max(16px, env(safe-area-inset-right) + 12px);
+  z-index: 100;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(30, 20, 32, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(255, 107, 139, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 107, 139, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.music-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 25px rgba(255, 107, 139, 0.5);
+}
+
+.music-icon {
+  font-size: 1.25rem;
+  display: inline-block;
+  line-height: 1;
+}
+
+.music-icon.spinning {
+  animation: rotateMusic 4s linear infinite;
+}
+
+@keyframes rotateMusic {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ===================================================
+   APP CONTAINER & SCREEN VIEWS
+   =================================================== */
+.app-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.screen-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+  transform: scale(0.96);
+  overflow: hidden;
+}
+
+.screen-view.active {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+  transform: scale(1);
+}
+
+/* Glass panel design */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1.5px solid var(--glass-border);
+  border-radius: 28px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6),
+              0 0 30px rgba(255, 107, 139, 0.15),
+              0 1px 2px rgba(255, 255, 255, 0.1) inset;
+}
+
+/* ===================================================
+   STAGE 1: INTRO SCREEN
+   =================================================== */
+.intro-card {
+  width: 92%;
+  max-width: 420px;
+  max-height: 90dvh;
+  padding: clamp(24px, 4.5vh, 38px) clamp(16px, 4vw, 28px);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(10px, 2vh, 16px);
+  animation: floatCard 6s ease-in-out infinite;
+}
+
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.intro-avatar-wrapper {
+  position: relative;
+  width: clamp(105px, 26vw, 130px);
+  height: clamp(105px, 26vw, 130px);
+  margin-bottom: 4px;
+}
+
+.avatar-glow-ring {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #ff9a9e, #ff4d79, #ff758c, #ff9a9e);
+  filter: blur(8px);
+  opacity: 0.9;
+  animation: rotateMusic 6s linear infinite;
+}
+
+.intro-avatar-img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3.5px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 30px rgba(255, 77, 121, 0.4);
+  background: #1a1018;
+  z-index: 2;
+}
+
+.avatar-badge {
+  position: absolute;
+  bottom: -4px;
+  right: 0px;
+  z-index: 3;
+  background: linear-gradient(135deg, #ff477e, #ff1a53);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  border: 2px solid #fff;
+  box-shadow: 0 4px 12px rgba(255, 26, 83, 0.5);
+}
+
+.intro-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 5.5vw, 2.15rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, #ffffff, #ffd0dc, #ff8da1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.2;
+}
+
+.intro-subtitle {
+  font-size: clamp(0.85rem, 3.2vw, 0.95rem);
+  color: var(--text-soft);
+  line-height: 1.5;
+  max-width: 320px;
+  font-weight: 500;
+}
+
+.start-btn {
+  position: relative;
+  margin-top: 10px;
+  padding: 14px 34px;
+  background: linear-gradient(135deg, #ff6584, #ff4371);
+  color: #fff;
+  border: none;
+  border-radius: 40px;
+  font-size: 1.02rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(255, 67, 113, 0.42);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.start-btn:hover, .start-btn:active {
+  transform: scale(1.05);
+  box-shadow: 0 14px 30px rgba(255, 67, 113, 0.55);
+}
+
+.btn-heart {
+  font-size: 1.2rem;
+  animation: heartPulse 1.4s ease-in-out infinite;
+}
+
+.pulse-ring {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 44px;
+  border: 2px solid rgba(255, 101, 132, 0.6);
+  animation: pulseOut 2s ease-out infinite;
+}
+
+@keyframes pulseOut {
+  0% { transform: scale(1); opacity: 0.9; }
+  100% { transform: scale(1.18); opacity: 0; }
+}
+
+@keyframes heartPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.28); }
+}
+
+/* ===================================================
+   STAGE 2: STORYTELLING SCREEN (Màn hình dọc cảm xúc)
+   =================================================== */
+.story-layout {
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.story-photo-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: gentleSway 7s ease-in-out infinite alternate;
+}
+
+@keyframes gentleSway {
+  0% { transform: rotate(-1.5deg) translateY(0); }
+  100% { transform: rotate(1.5deg) translateY(-6px); }
+}
+
+.photo-card-frame {
+  position: relative;
+  width: 170px;
+  height: 170px;
+  background: rgba(30, 20, 32, 0.85);
+  padding: 8px 8px 14px 8px;
+  border-radius: 16px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 71, 126, 0.3);
+  border: 1px solid rgba(255, 180, 205, 0.35);
+}
+
+.photo-glow {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 20px;
+  background: radial-gradient(circle, rgba(255, 107, 139, 0.4) 0%, transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.story-photo-img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.photo-tape {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 18px;
+  background: rgba(255, 180, 200, 0.25);
+  backdrop-filter: blur(8px);
+  border: 1px dashed rgba(255, 180, 205, 0.6);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  z-index: 2;
+}
+
+.photo-caption {
+  margin-top: 10px;
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  color: #ffdce5;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+
+.story-message-container {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.letter-card {
+  padding: 28px 32px;
+  min-height: 190px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  border-radius: 26px;
+  background: rgba(18, 12, 22, 0.78);
+  border: 1px solid rgba(255, 180, 205, 0.28);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 77, 121, 0.2);
+  transition: all 0.6s ease;
+}
+
+.letter-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 180, 205, 0.2);
+  padding-bottom: 10px;
+}
+
+.letter-feather {
+  font-size: 1.1rem;
+  filter: drop-shadow(0 0 6px rgba(255, 107, 139, 0.6));
+}
+
+.letter-tag {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #ff9cb3;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.story-dots {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+}
+
+.story-dots .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  transition: all 0.5s ease;
+}
+
+.story-dots .dot.active {
+  background: #ff477e;
+  width: 18px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #ff477e;
+}
+
+.poem-display-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 8px 16px;
+  min-height: 95px;
+}
+
+.narration-card {
+  padding: 16px 20px;
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: transparent;
+  border: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+
+.narration-display-area {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.narrative-text {
+  font-family: var(--font-serif);
+  font-size: 2.35rem;
+  line-height: 1.85;
+  color: #ffffff;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.98),
+               0 2px 10px rgba(0, 0, 0, 0.9),
+               0 0 35px rgba(255, 180, 205, 0.6),
+               0 0 12px rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.6px;
+  font-weight: 600;
+  text-align: center;
+  min-height: 2.2em;
+}
+
+/* Từng dòng/cả câu xuất hiện nguyên vẹn từ mờ sương (blur) sang rõ dần (clear) */
+.narrative-line {
+  display: block;
+  margin: 6px 0;
+  opacity: 0;
+  transform: translateY(8px);
+  filter: blur(8px);
+  transition: opacity 1200ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1200ms cubic-bezier(0.16, 1, 0.3, 1),
+              filter 1200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.narrative-line.revealed {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.narrative-line.fade-out {
+  opacity: 0;
+  transform: translateY(-8px);
+  filter: blur(6px);
+  transition: opacity 800ms cubic-bezier(0.25, 1, 0.5, 1),
+              transform 800ms cubic-bezier(0.25, 1, 0.5, 1),
+              filter 800ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ===================================================
+   STAGE 3: CLIMAX SCREEN (EXACT SPECIFICATION)
+   =================================================== */
+#climax-screen {
+  overflow: hidden;
+}
+
+.proposal-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 520px;
+  text-align: center;
+  z-index: 15;
+  pointer-events: auto;
+}
+
+.proposal-box {
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* Bước 3: "Phương Anh..." hiển thị nhỏ và nhẹ */
+.final-lead-name {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #ffdbe4;
+  letter-spacing: 1.8px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 107, 139, 0.5);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 1000ms ease, transform 1000ms ease;
+}
+
+.final-lead-name.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.final-proposal-text {
+  font-family: 'Dancing Script', 'Alex Brush', cursive;
+  font-size: 2.75rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.35;
+  letter-spacing: 1px;
+  text-shadow: 0 0 25px rgba(255, 255, 255, 1),
+               0 0 15px rgba(255, 215, 225, 0.9),
+               0 4px 20px rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  text-align: center;
+  max-width: 92vw;
+  margin: 0 auto;
+}
+
+.prop-main-line {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(12px) scale(0.95);
+  filter: blur(8px);
+  transition: opacity 1200ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1200ms cubic-bezier(0.16, 1, 0.3, 1),
+              filter 1200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.prop-main-line.revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+.prop-heart-icon {
+  display: inline-block;
+  font-size: 2.2rem;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 800ms ease, transform 800ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.prop-heart-icon.revealed {
+  opacity: 1;
+  transform: scale(1);
+  animation: heartPulse 1.8s infinite ease-in-out 0.8s;
+}
+
+@keyframes glowPulse {
+  0% {
+    text-shadow: 0 0 18px rgba(255, 255, 255, 0.9),
+                 0 4px 16px rgba(0, 0, 0, 0.7);
+  }
+  100% {
+    text-shadow: 0 0 32px rgba(255, 255, 255, 1),
+                 0 0 10px rgba(255, 220, 230, 0.9),
+                 0 6px 24px rgba(0, 0, 0, 0.85);
+  }
+}
+
+.proposal-actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(15px);
+  transition: opacity 1000ms cubic-bezier(0.16, 1, 0.3, 1), transform 1000ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.proposal-actions.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.choice-btn {
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.agree-btn {
+  background: #ffffff;
+  color: #e0245e;
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.5), 0 4px 15px rgba(180, 20, 60, 0.4);
+}
+
+.agree-btn:hover, .agree-btn:active {
+  transform: scale(1.08);
+  box-shadow: 0 12px 30px rgba(255, 255, 255, 0.8), 0 6px 20px rgba(180, 20, 60, 0.5);
+}
+
+.shy-btn {
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.shy-btn:hover, .shy-btn:active {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.accepted-message {
+  margin-top: 14px;
+  padding: 14px 20px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  animation: fadeInPop 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInPop {
+  0% { opacity: 0; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.sweet-quote {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: #ffffff;
+  font-style: italic;
+  line-height: 1.5;
+  text-shadow: 0 2px 8px rgba(160, 10, 50, 0.6);
+}
+
+.couple-tag {
+  display: block;
+  margin-top: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #fff;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 6px rgba(160, 10, 50, 0.6);
+}
+
+.hide {
+  display: none !important;
+}
+
+/* ===================================================
+   RESPONSIVE DESIGN (Tối ưu chuẩn xem dọc cho mọi dòng điện thoại)
+   =================================================== */
+
+/* --- 1. MOBILE PHONES (iPhone 11-16, Samsung Galaxy, Xiaomi...) --- */
+@media (max-width: 768px) {
+  .screen-view {
+    padding: max(16px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  }
+
+  .intro-card {
+    width: 92%;
+    max-width: 390px;
+    padding: clamp(26px, 5vh, 36px) clamp(16px, 4vw, 24px);
+    gap: clamp(12px, 2.2vh, 16px);
+  }
+
+  .intro-avatar-wrapper {
+    width: clamp(105px, 28vw, 125px);
+    height: clamp(105px, 28vw, 125px);
+  }
+
+  .intro-title {
+    font-size: clamp(1.75rem, 6vw, 2.1rem);
+  }
+
+  .intro-subtitle {
+    font-size: clamp(0.85rem, 3.2vw, 0.95rem);
+    line-height: 1.5;
+  }
+
+  .start-btn {
+    padding: 12px 24px;
+    font-size: clamp(0.92rem, 3.5vw, 1.02rem);
+    min-height: 48px;
+  }
+
+  .story-layout {
+    width: 100%;
+    padding: 0 16px;
+  }
+
+  .story-message-container {
+    width: 100%;
+    max-width: 95vw;
+  }
+
+  .narrative-text {
+    font-size: clamp(1.48rem, 5.2vw, 1.95rem);
+    line-height: 1.75;
+    letter-spacing: 0.4px;
+  }
+
+  .proposal-wrapper {
+    width: 94%;
+    max-width: 440px;
+  }
+
+  .final-lead-name {
+    font-size: 1.25rem;
+  }
+
+  .final-proposal-text {
+    font-size: clamp(1.65rem, 6.2vw, 2.15rem);
+    gap: 6px;
+    line-height: 1.3;
+  }
+
+  .proposal-actions {
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .choice-btn {
+    padding: 11px 22px;
+    font-size: 0.95rem;
+    min-width: 135px;
+    min-height: 44px;
+  }
+}
+
+/* --- 2. SMALL PHONES (iPhone SE, iPhone mini, máy nhỏ <= 380px) --- */
+@media (max-width: 380px) {
+  .intro-card {
+    padding: 22px 14px;
+    gap: 10px;
+  }
+
+  .intro-avatar-wrapper {
+    width: 95px;
+    height: 95px;
+  }
+
+  .intro-title {
+    font-size: 1.65rem;
+  }
+
+  .intro-subtitle {
+    font-size: 0.82rem;
+  }
+
+  .start-btn {
+    padding: 10px 20px;
+    font-size: 0.88rem;
+    min-height: 42px;
+  }
+
+  .narrative-text {
+    font-size: 1.35rem;
+    line-height: 1.6;
+  }
+
+  .final-proposal-text {
+    font-size: 1.55rem;
+  }
+
+  .choice-btn {
+    padding: 9px 16px;
+    font-size: 0.86rem;
+    min-width: 120px;
+    min-height: 40px;
+  }
+}
